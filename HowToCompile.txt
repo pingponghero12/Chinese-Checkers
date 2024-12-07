@@ -1,0 +1,9 @@
+How to complie:
+g++ server.cpp -o server -pthread
+g++ client.cpp -o client 
+
+Run server in the current terminal:
+./server
+
+Run client in a different terminal:
+./client
