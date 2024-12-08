@@ -1,6 +1,12 @@
 #include "server.hpp"
 
-bool init_server(int& server_fd) {
+Server::Server(int port) : port(port), server_fd(0) {}
+
+Server::~Server() {
+    close(server_fd);
+}
+
+bool Server::init_server() {
     struct sockaddr_in address;
     // socklen_t addrlen = sizeof(address);
 
@@ -41,14 +47,18 @@ bool init_server(int& server_fd) {
 
     std::cout << "Server listening on port " << PORT << "\n";
 
-    // Rozpoczęcie osobnego wątku do obsługi wejścia z konsoli.
-    std::thread input_thread(server_input_thread);
-    input_thread.detach();
-
     return true;
 }
 
-void server_input_thread() {
+void Server::start_server() {
+    // Rozpoczęcie osobnego wątku do obsługi wejścia z konsoli.
+    std::thread input_thread(&Server::server_input_thread, this);
+    input_thread.detach();
+
+    loop_new_clients();
+}
+
+void Server::server_input_thread() {
     std::string message;
     while (true) {
         std::getline(std::cin, message);
@@ -59,7 +69,7 @@ void server_input_thread() {
     }
 }
 
-void loop_new_clients(const int& server_fd) {
+void Server::loop_new_clients() {
     int client_number = 1;
 
     while (true) {
@@ -84,9 +94,48 @@ void loop_new_clients(const int& server_fd) {
         }
 
         // Uruchomienie nowego wątku do obsługi komunikacji z klientem.
-        std::thread client_thread(handle_client, new_socket, client_number, client_addr);
+        std::thread client_thread(&Server::handle_client, this, new_socket, client_number, client_addr);
         client_thread.detach();
 
         client_number++;
+    }
+}
+
+void Server::broadcast_message(const std::string& message) {
+    std::lock_guard<std::mutex> lock(client_mutex);
+
+    for (const int& socket : client_sockets) {
+        send(socket, message.c_str(), message.length(), 0);
+    }
+}
+
+void Server::handle_client(int client_socket, int client_number, struct sockaddr_in client_addr) {
+    char buffer[BUFFER_SIZE];
+    while (true) {
+        // Clean buffer
+        memset(buffer, 0, BUFFER_SIZE);
+        int bytes_read = read(client_socket, buffer, BUFFER_SIZE);
+
+        // Check for error or disconnect
+        if (bytes_read <= 0) {
+            std::cout << "Client[" << client_number << "] disconnected. IP: " 
+                      << inet_ntoa(client_addr.sin_addr) << "\n";
+
+            close(client_socket);
+            break;
+        }
+
+        // Przekształcenie otrzymanego bufora na string w celu łatwiejszej obsługi.
+        std::string message = std::string(buffer);
+        std::cout << "Client[" << client_number << "]: " << message;
+    }
+
+    // Usunięcie gniazda rozłączonego klienta z listy aktywnych klientów.
+    {
+        std::lock_guard<std::mutex> lock(client_mutex);
+        client_sockets.erase(
+            std::remove(client_sockets.begin(), client_sockets.end(), client_socket),
+            client_sockets.end()
+        );
     }
 }

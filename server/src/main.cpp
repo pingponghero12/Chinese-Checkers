@@ -10,22 +10,14 @@
 #include <arpa/inet.h>
 
 #include "server.hpp"
-#include "handle_clients.hpp"
-
-std::vector<int> client_sockets;
-std::mutex client_mutex;
-
-bool server_on = true;
-std::mutex server_on_mutex;
 
 int main() {
-    int server_fd;
+    Server server;
 
-    if (!init_server(server_fd)) {
+    if (!server.init_server()) {
         return EXIT_FAILURE;
     }
 
-    loop_new_clients(server_fd);
-
+    server.start_server();
     return 0;
 }

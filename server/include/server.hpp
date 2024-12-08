@@ -12,19 +12,29 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#include "handle_clients.hpp"
-
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-extern std::vector<int> client_sockets;
-extern std::mutex client_mutex;
+class Server {
+public:
+    Server(int port = PORT);
+    ~Server();
 
-// Wątek obsługujący wejście serwera (komendy administratora) z konsoli.
-void server_input_thread();
+    bool init_server();
+    void start_server();
 
-bool init_server(int& server_fd);
+private:
+    int port;
+    int server_fd;
+    std::vector<int> client_sockets;
+    std::mutex client_mutex;
 
-void loop_new_clients(const int& server_fd);
+    void server_input_thread();
+    void loop_new_clients();
+    void broadcast_message(const std::string& message);
+
+    // Każdy klient jest obsługiwany w osobnym wątku.
+    void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr);
+};
 
 #endif // __SERVER__
