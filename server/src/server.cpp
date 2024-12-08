@@ -4,10 +4,10 @@
 #include <string>
 #include <cstring>
 #include <mutex>
-#include <algorithm> // For std::remove
+#include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <arpa/inet.h> // For inet_ntoa
+#include <arpa/inet.h>
 
 #define PORT 8080
 #define BUFFER_SIZE 1024
@@ -15,36 +15,39 @@
 std::vector<int> client_sockets;
 std::mutex client_mutex;
 
-// Funkcja wysyłająca podaną wiadomość do wszystkich połączonych klientów.
-void broadcastMessage(const std::string& message) {
-    std::lock_guard<std::mutex> lock(client_mutex); // Zapewnia bezpieczny dostęp do client_sockets w środowisku wielowątkowym.
-    for (int socket : client_sockets) {
-        send(socket, message.c_str(), message.length(), 0); // Wysyła wiadomość do każdego klienta.
+void broadcast_message(const std::string& message) {
+    std::lock_guard<std::mutex> lock(client_mutex);
+
+    for (const int& socket : client_sockets) {
+        send(socket, message.c_str(), message.length(), 0);
     }
 }
 
-// Funkcja obsługująca komunikację z pojedynczym klientem.
 // Każdy klient jest obsługiwany w osobnym wątku.
-void handleClient(int client_socket, int client_number, struct sockaddr_in client_addr) {
+void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr) {
     char buffer[BUFFER_SIZE];
     while (true) {
-        memset(buffer, 0, BUFFER_SIZE); // Czyszczenie bufora przed odczytem danych.
-        int bytes_read = read(client_socket, buffer, BUFFER_SIZE); // Odczyt danych od klienta.
-        if (bytes_read <= 0) { // Sprawdzenie, czy klient się rozłączył lub wystąpił błąd.
+        // Clean buffer
+        memset(buffer, 0, BUFFER_SIZE);
+        int bytes_read = read(client_socket, buffer, BUFFER_SIZE);
+
+        // Check for error or disconnect
+        if (bytes_read <= 0) {
             std::cout << "Client[" << client_number << "] disconnected. IP: " 
                       << inet_ntoa(client_addr.sin_addr) << "\n";
-            close(client_socket); // Zamknięcie gniazda klienta.
+
+            close(client_socket);
             break;
         }
 
         // Przekształcenie otrzymanego bufora na string w celu łatwiejszej obsługi.
         std::string message = std::string(buffer);
-        std::cout << "Client[" << client_number << "]: " << message; // Wyświetlenie wiadomości od klienta.
+        std::cout << "Client[" << client_number << "]: " << message;
     }
 
     // Usunięcie gniazda rozłączonego klienta z listy aktywnych klientów.
     {
-        std::lock_guard<std::mutex> lock(client_mutex); // Zapewnia bezpieczny dostęp w środowisku wielowątkowym.
+        std::lock_guard<std::mutex> lock(client_mutex);
         client_sockets.erase(
             std::remove(client_sockets.begin(), client_sockets.end(), client_socket),
             client_sockets.end()
@@ -53,13 +56,13 @@ void handleClient(int client_socket, int client_number, struct sockaddr_in clien
 }
 
 // Wątek obsługujący wejście serwera (komendy administratora) z konsoli.
-void serverInputThread() {
+void server_input_thread() {
     std::string message;
     while (true) {
         std::getline(std::cin, message); // Odczyt wiadomości z konsoli.
         if (message.empty()) continue; // Pominięcie pustych wiadomości.
         message += "\n"; // Dodanie nowej linii dla poprawy czytelności.
-        broadcastMessage("Server: " + message); // Wysłanie wiadomości do wszystkich klientów.
+        broadcast_message("Server: " + message); // Wysłanie wiadomości do wszystkich klientów.
     }
 }
 
@@ -89,14 +92,14 @@ int main() {
 
     // Powiązanie gniazda serwera z określonym adresem i portem.
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        perror("Bind failed"); // Wyświetlenie błędu w przypadku niepowodzenia powiązania.
+        perror("Bind failed");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
 
     // Rozpoczęcie nasłuchiwania na połączenia od klientów.
     if (listen(server_fd, 10) < 0) { // Kolejka połączeń o długości 10.
-        perror("Listen failed"); // Wyświetlenie błędu w przypadku niepowodzenia.
+        perror("Listen failed");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
@@ -104,19 +107,21 @@ int main() {
     std::cout << "Server listening on port " << PORT << "\n";
 
     // Rozpoczęcie osobnego wątku do obsługi wejścia z konsoli.
-    std::thread input_thread(serverInputThread);
-    input_thread.detach(); // Wątek działa niezależnie.
+    std::thread input_thread(server_input_thread);
+    input_thread.detach();
 
-    int client_number = 1; // Numeracja klientów (rozpoczyna się od 1).
+     // Numeracja klientów (rozpoczyna się od 1).
+    int client_number = 1;
 
     // Główna pętla do obsługi nowych połączeń klientów.
     while (true) {
         struct sockaddr_in client_addr;
         socklen_t client_addrlen = sizeof(client_addr);
         new_socket = accept(server_fd, (struct sockaddr *)&client_addr, &client_addrlen); // Akceptacja nowego połączenia.
+
         if (new_socket < 0) {
-            perror("Accept failed"); // Wyświetlenie błędu w przypadku niepowodzenia akceptacji.
-            continue; // Przejście do następnej iteracji w celu obsługi kolejnego klienta.
+            perror("Accept failed");
+            continue;
         }
 
         // Wyświetlenie informacji o nowym kliencie.
@@ -130,18 +135,13 @@ int main() {
         }
 
         // Uruchomienie nowego wątku do obsługi komunikacji z klientem.
-        std::thread client_thread(handleClient, new_socket, client_number, client_addr);
-        client_thread.detach(); // Wątek działa niezależnie.
+        std::thread client_thread(handle_client, new_socket, client_number, client_addr);
+        client_thread.detach();
 
         client_number++; // Zwiększenie licznika klientów dla kolejnego klienta.
     }
 
-    close(server_fd); // Zamknięcie gniazda serwera (nieosiągalne w nieskończonej pętli).
-
-    /*TODO:
-    - Użyć instrukcji switch do określenia rodzaju gry na podstawie liczby graczy (client_number).
-    - Stworzyć strukturę danych przechowującą stan gry (ruchy graczy i odpowiedzi serwera).
-    */
+    close(server_fd);
 
     return 0;
 }
