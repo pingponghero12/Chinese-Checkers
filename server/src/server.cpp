@@ -105,6 +105,19 @@ void Server::broadcast_message(const std::string& message) {
     }
 }
 
+void Server::send_message(const std::string& message, const int& client_id) {
+    std::lock_guard<std::mutex> lock(client_mutex);
+
+    if (client_id < 0 || client_id >= client_sockets.size()) {
+        std::cerr << "error: invalid client id: " << client_id << std::endl;
+        return;
+    }
+
+    if (send(socket, message.c_str(), message.length(), 0) < 0) {
+        perror("error: send() failed);
+    }
+}
+
 void Server::handle_client(int client_socket, int client_number, struct sockaddr_in client_addr) {
     char buffer[BUFFER_SIZE];
     while (true) {
