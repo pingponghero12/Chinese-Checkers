@@ -1,0 +1,53 @@
+@startuml
+!define STYLE bold
+
+package "Server System" {
+    class main {
+        + int main()
+    }
+
+    class Server {
+        + Server(int port = PORT)
+        + ~Server()
+        + bool init_server()
+        + void start_server()
+        --
+        - int port
+        - int server_fd
+        - std::vector<int> client_sockets
+        - std::mutex client_mutex
+        --
+        - void server_input_thread()
+        - void loop_new_clients()
+        - void broadcast_message(const std::string& message)
+        - void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr)
+    }
+
+    class ServerController {
+    	// Calls info send to clients and responds to client messages.
+	--
+        + controller_functions()
+        --
+        - std::vector<Game> current_games
+    }
+
+    class Game {
+        // Game logic and move functions.
+        --
+        - std::vector<std::pair<int, int>> client_to_player_mapping
+        - Board board
+    }
+
+    class Board {
+        + void setup_board(int num_players)
+        --
+        // Details about the board's layout and logic can go here
+    }
+}
+
+main --> Server : creates and uses
+Server --> ServerController : calls functions
+ServerController --> Server : calls functions
+ServerController --> Game : manages multiple games
+Game --> Board : contains a board for each game
+@enduml
