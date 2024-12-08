@@ -1,2 +1,4 @@
 client/build/*
+client/old/
 server/build/*
+server/old/

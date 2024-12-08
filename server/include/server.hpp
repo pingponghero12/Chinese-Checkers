@@ -31,9 +31,8 @@ private:
 
     void server_input_thread();
     void loop_new_clients();
-    void broadcast_message(const std::string& message);
 
-    // Każdy klient jest obsługiwany w osobnym wątku.
+    void broadcast_message(const std::string& message);
     void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr);
 };
 

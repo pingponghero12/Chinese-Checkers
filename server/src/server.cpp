@@ -8,7 +8,6 @@ Server::~Server() {
 
 bool Server::init_server() {
     struct sockaddr_in address;
-    // socklen_t addrlen = sizeof(address);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == 0) {
@@ -16,7 +15,7 @@ bool Server::init_server() {
         return false;;
     }
 
-    // Ustawienie opcji gniazda, aby umożliwić ponowne użycie adresu i portu.
+    // Setup of socket options, to fobid using address and port again
     int opt = 1;
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
         perror("setsockopt");
@@ -24,34 +23,32 @@ bool Server::init_server() {
         return false;;
     }
 
-    // Konfiguracja struktury adresu serwera.
     address.sin_family = AF_INET;
-    // Akceptowanie połączeń na wszystkich dostępnych interfejsach.
+    // Accept connections on every interface
     address.sin_addr.s_addr = INADDR_ANY;
-    // Konwersja numeru portu na format sieciowy.
+    // Portal number to network format
     address.sin_port = htons(PORT);
 
-    // Powiązanie gniazda serwera z określonym adresem i portem.
+    // Binding of socket with address and port
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
         perror("Bind failed");
         close(server_fd);
         return false;
     }
 
-    // Rozpoczęcie nasłuchiwania na połączenia od klientów.
-    if (listen(server_fd, 10) < 0) { // Kolejka połączeń o długości 10.
+    // Start listening
+    if (listen(server_fd, 10) < 0) { // Queue lenght 10
         perror("Listen failed");
         close(server_fd);
         return false;;
     }
 
     std::cout << "Server listening on port " << PORT << "\n";
-
     return true;
 }
 
 void Server::start_server() {
-    // Rozpoczęcie osobnego wątku do obsługi wejścia z konsoli.
+    // Other thread for console I/O
     std::thread input_thread(&Server::server_input_thread, this);
     input_thread.detach();
 
@@ -86,14 +83,13 @@ void Server::loop_new_clients() {
         std::cout << "New client connected: Client[" << client_number << "], IP: " 
                   << inet_ntoa(client_addr.sin_addr) << "\n";
 
-        // Dodanie gniazda nowego klienta do listy aktywnych klientów.
         // Personally I'm more of lock() unlock() guy
         {
             std::lock_guard<std::mutex> lock(client_mutex);
             client_sockets.push_back(new_socket);
         }
 
-        // Uruchomienie nowego wątku do obsługi komunikacji z klientem.
+        // New client thread
         std::thread client_thread(&Server::handle_client, this, new_socket, client_number, client_addr);
         client_thread.detach();
 
@@ -125,12 +121,12 @@ void Server::handle_client(int client_socket, int client_number, struct sockaddr
             break;
         }
 
-        // Przekształcenie otrzymanego bufora na string w celu łatwiejszej obsługi.
+        // Received buffor to string
         std::string message = std::string(buffer);
         std::cout << "Client[" << client_number << "]: " << message;
     }
 
-    // Usunięcie gniazda rozłączonego klienta z listy aktywnych klientów.
+    // Deletion of disconnected client from list of active
     {
         std::lock_guard<std::mutex> lock(client_mutex);
         client_sockets.erase(
