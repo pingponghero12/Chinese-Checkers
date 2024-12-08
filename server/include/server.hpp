@@ -23,4 +23,8 @@ extern std::mutex client_mutex;
 // Wątek obsługujący wejście serwera (komendy administratora) z konsoli.
 void server_input_thread();
 
+bool init_server(int& server_fd);
+
+void loop_new_clients(const int& server_fd);
+
 #endif // __SERVER__
