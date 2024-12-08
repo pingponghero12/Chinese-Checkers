@@ -1,0 +1,26 @@
+@startuml
+actor Client as StickMan
+participant Server as "Server [📡]"
+
+StickMan -> Server: connect
+StickMan -> Server: create <number of people>
+Server --> StickMan: "Game created and joined"
+
+StickMan -> Server: list
+Server --> StickMan: "Available lobbies"
+
+StickMan -> Server: join <lobby id>
+Server --> StickMan: "Joined game"
+
+group In Game
+    StickMan -> Server: move <position 1> <position 2>
+    Server --> StickMan: "Updated board state"
+
+    StickMan -> Server: exit
+    Server --> StickMan: "Return to main screen"
+    Server --> All: "Notify other players"
+end
+
+Server --> StickMan: "Game ended"
+StickMan --> Server: disconnect
+@enduml
