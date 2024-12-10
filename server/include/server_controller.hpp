@@ -35,7 +35,7 @@ public:
 private:
     Server* server;
     std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
-    std::vector<Game> current_games_;
+    std::vector<Game> current_games;
     void initialize_commands();
 };
 

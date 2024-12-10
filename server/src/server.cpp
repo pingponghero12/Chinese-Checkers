@@ -110,7 +110,6 @@ void Server::broadcast_message(const std::string& message) {
 void Server::send_message(const std::string& message, const int& client_id) {
     std::lock_guard<std::mutex> lock(client_mutex);
 
-    std::cout << "Debug " << client_id << std::endl;
     if (client_id < 0 || client_id > client_sockets.size()) {
         std::cerr << "error: invalid client id: " << client_id << std::endl;
         return;

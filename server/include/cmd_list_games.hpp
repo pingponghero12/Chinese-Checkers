@@ -1,0 +1,39 @@
+#ifndef __CMDLISTGAMES__
+#define __CMDLISTGAMES__
+
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <string>
+#include <cstring>
+#include <mutex>
+#include <algorithm>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <unordered_map>
+#include <memory>
+#include <sstream>
+
+#include "abstract_command.hpp"
+#include "server_controller.hpp"
+
+class CmdListGames : public AbstractCommand {
+public:
+    CmdListGames(ServerController& controller) : controller(controller) {}
+
+    void execute(const std::vector<int>& args, int client_number) {
+        const auto& games = controller.game_list();
+
+        std::string out = "";
+        for (int i=0; i < games.size(); i++) {
+            out = out + std::to_string(i) + "\n";
+        }
+        controller.send_call(out, client_number);
+    }
+
+private:
+    ServerController& controller;
+};
+
+#endif // __CMDLISTGAMES__
