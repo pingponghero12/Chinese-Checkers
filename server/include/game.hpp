@@ -24,6 +24,9 @@ public:
     int get_id();
     int get_game_type();
     int get_players();
+
+    void add_player(int client_number);
+    void remove_player(int client_number);
 private:
     std::vector<int> players;
     int id;

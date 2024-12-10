@@ -17,3 +17,14 @@ int Game::get_game_type() {
 int Game::get_players() {
     return players.size();
 }
+
+void Game::add_player(int client_number) {
+    players.push_back(client_number);
+}
+
+void Game::remove_player(int client_number) {
+    auto it = std::find(players.begin(), players.end(), client_number);
+    if (it != players.end()) {
+        players.erase(it);
+    }
+}

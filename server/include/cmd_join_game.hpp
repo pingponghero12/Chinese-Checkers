@@ -1,5 +1,5 @@
-#ifndef __CMDADDGAME__
-#define __CMDADDGAME__
+#ifndef __CMDJOINGAME__
+#define __CMDJOINGAME__
 
 #include <iostream>
 #include <thread>
@@ -19,9 +19,9 @@
 #include "server_controller.hpp"
 #include "game.hpp"
 
-class CmdAddGame : public AbstractCommand {
+class CmdJoinGame : public AbstractCommand {
 public:
-    CmdAddGame(ServerController& controller) : controller(controller) {}
+    CmdJoinGame(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_number) {
         if (args.size() != 1) {
@@ -29,15 +29,14 @@ public:
             return;
         }
 
-        Game game(args[0], client_number);
-        controller.add_game(client_number, game);
-        controller.update_player_status(client_number, client_number);
+        controller.update_player_status(client_number, args[0]);
+        controller.add_player_to_game(client_number, args[0]);
 
-        controller.send_call("Added game\n", client_number);
+        controller.send_call("Joined game\n", client_number);
     }
 
 private:
     ServerController& controller;
 };
 
-#endif // __CMDADDGAME__
+#endif // __CMDJOINGAME__

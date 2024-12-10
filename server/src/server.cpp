@@ -86,6 +86,8 @@ void Server::loop_new_clients() {
         std::cout << "New client connected: Client[" << client_number << "], IP: " 
                   << inet_ntoa(client_addr.sin_addr) << "\n";
 
+        controller->update_player_status(client_number, -1);
+
         // Personally I'm more of lock() unlock() guy
         {
             std::lock_guard<std::mutex> lock(client_mutex);
