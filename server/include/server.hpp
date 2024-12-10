@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <unordered_map>
 
 #include "server_controller.hpp"
 
@@ -32,7 +33,7 @@ public:
 private:
     int port;
     int server_fd;
-    std::vector<int> client_sockets;
+    std::unordered_map<int, int> client_sockets;
     std::mutex client_mutex;
     ServerController* controller;
 

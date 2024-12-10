@@ -57,6 +57,7 @@ void Server::start_server() {
     loop_new_clients();
 }
 
+
 void Server::server_input_thread() {
     std::string message;
     while (true) {
@@ -88,7 +89,7 @@ void Server::loop_new_clients() {
         // Personally I'm more of lock() unlock() guy
         {
             std::lock_guard<std::mutex> lock(client_mutex);
-            client_sockets.push_back(new_socket);
+            client_sockets[client_number] = new_socket;
         }
 
         // New client thread
@@ -102,15 +103,16 @@ void Server::loop_new_clients() {
 void Server::broadcast_message(const std::string& message) {
     std::lock_guard<std::mutex> lock(client_mutex);
 
-    for (const int& socket : client_sockets) {
-        send(socket, message.c_str(), message.length(), 0);
+    for (const auto& pair : client_sockets) {
+        send(pair.second, message.c_str(), message.length(), 0);
     }
 }
 
 void Server::send_message(const std::string& message, const int& client_id) {
     std::lock_guard<std::mutex> lock(client_mutex);
 
-    if (client_id < 0 || client_id > client_sockets.size()) {
+    auto it = client_sockets.find(client_id);
+    if (it == client_sockets.end()) {
         std::cerr << "error: invalid client id: " << client_id << std::endl;
         return;
     }
@@ -145,9 +147,6 @@ void Server::handle_client(int client_socket, int client_number, struct sockaddr
     // Deletion of disconnected client from list of active
     {
         std::lock_guard<std::mutex> lock(client_mutex);
-        client_sockets.erase(
-            std::remove(client_sockets.begin(), client_sockets.end(), client_socket),
-            client_sockets.end()
-        );
+        client_sockets.erase(client_number);
     }
 }
