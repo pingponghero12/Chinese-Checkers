@@ -26,13 +26,23 @@ package "Server System" {
     class ServerController {
     	// Calls info send to clients and responds to client messages.
 	--
-        + controller_functions()
+	+ void parse_call(const std::string& message, int client_number);
+	+ void send_call(const std::string& message, int client_number);
+
+	+ std::vector<Game> game_list()
+	+ void add_game(Game game)
+	+ void delete_game(int game_id)
         --
         - std::vector<Game> current_games
     }
 
     class Game {
         // Game logic and move functions.
+	--
+	+ 
+	+ void game_logic() // Called after each function
+	+ void move(int client_id)
+	+ void end()
         --
         - std::vector<std::pair<int, int>> client_to_player_mapping
         - Board board
