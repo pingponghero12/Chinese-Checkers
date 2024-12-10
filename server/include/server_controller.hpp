@@ -11,23 +11,26 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <unordered_map>
+#include <memory>
+#include <sstream>
 
 class ServerController {
 public:
     ServerController();
-    ~ServerController();
+    ~ServerController() = default;
 
-    void handle_input(char* buffer);
+    void parse_call(const std::string& message, int client_number);
+    void send_call(const std::string& message, int client_numbere);
+
+    void add_game(const Game& game);
+    void delete_game(int game_id);
+    std::vector<Game> game_list();
 
 private:
-    std::vector<Game> games;
-
-    void create_game(const int& user, const int& players);
-    void list_games(const int& user);
-    void join_game(const int& user, const int& game_id);
-
-    void send_message(const std::string& message, const int& client_id);
-
+    std::unordered_map<int, std::unique_ptr<ICommand>> command_registry_;
+    std::vector<Game> current_games_;
+    void initialize_commands();
 };
 
 #endif // __SERVERCONTROLLER__

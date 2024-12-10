@@ -1,0 +1,14 @@
+#ifndef __ABSTRACTCOMMAND__
+#define __ABSTRACTCOMMAND__
+
+#include <vector>
+#include <string>
+
+class AbstractCommand {
+public:
+    virtual ~AbstractCommand() = default;
+    virutal void execute(const std::vector<int>& args, int client_number) = 0;
+};
+
+#endif // __ABSTRACTCOMMAND__
+
