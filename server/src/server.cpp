@@ -1,6 +1,8 @@
 #include "server.hpp"
 
-Server::Server(int port) : port(port), server_fd(0) {}
+Server::Server(int port) : port(port), server_fd(0) {
+    controller = new ServerController();
+}
 
 Server::~Server() {
     close(server_fd);
@@ -113,8 +115,8 @@ void Server::send_message(const std::string& message, const int& client_id) {
         return;
     }
 
-    if (send(socket, message.c_str(), message.length(), 0) < 0) {
-        perror("error: send() failed);
+    if (::send(client_sockets[client_id], message.c_str(), message.length(), 0) < 0) {
+        perror("error: send() failed");
     }
 }
 
@@ -137,6 +139,7 @@ void Server::handle_client(int client_socket, int client_number, struct sockaddr
         // Received buffor to string
         std::string message = std::string(buffer);
         std::cout << "Client[" << client_number << "]: " << message;
+        controller->parse_call(message, client_number);
     }
 
     // Deletion of disconnected client from list of active

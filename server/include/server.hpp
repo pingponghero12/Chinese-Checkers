@@ -12,6 +12,8 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#include "server_controller.hpp"
+
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
@@ -23,18 +25,19 @@ public:
     bool init_server();
     void start_server();
 
+    void send_message(const std::string& message, const int& client_id);
+    void broadcast_message(const std::string& message);
+    void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr);
+
 private:
     int port;
     int server_fd;
     std::vector<int> client_sockets;
     std::mutex client_mutex;
+    ServerController* controller;
 
     void server_input_thread();
     void loop_new_clients();
-
-    void Server::send_message(const std::string& message, const int& client_id);
-    void broadcast_message(const std::string& message);
-    void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr);
 };
 
 #endif // __SERVER__

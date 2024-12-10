@@ -15,6 +15,9 @@
 #include <memory>
 #include <sstream>
 
+#include "game.hpp"
+#include "abstract_command.hpp"
+
 class ServerController {
 public:
     ServerController();
@@ -28,7 +31,7 @@ public:
     std::vector<Game> game_list();
 
 private:
-    std::unordered_map<int, std::unique_ptr<ICommand>> command_registry_;
+    std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
     std::vector<Game> current_games_;
     void initialize_commands();
 };
