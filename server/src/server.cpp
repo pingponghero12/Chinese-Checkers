@@ -1,7 +1,7 @@
 #include "server.hpp"
 
 Server::Server(int port) : port(port), server_fd(0) {
-    controller = new ServerController();
+    controller = new ServerController(this);
 }
 
 Server::~Server() {
@@ -69,7 +69,7 @@ void Server::server_input_thread() {
 }
 
 void Server::loop_new_clients() {
-    int client_number = 1;
+    int client_number = 0;
 
     while (true) {
         int new_socket;
@@ -110,12 +110,13 @@ void Server::broadcast_message(const std::string& message) {
 void Server::send_message(const std::string& message, const int& client_id) {
     std::lock_guard<std::mutex> lock(client_mutex);
 
-    if (client_id < 0 || client_id >= client_sockets.size()) {
+    std::cout << "Debug " << client_id << std::endl;
+    if (client_id < 0 || client_id > client_sockets.size()) {
         std::cerr << "error: invalid client id: " << client_id << std::endl;
         return;
     }
 
-    if (::send(client_sockets[client_id], message.c_str(), message.length(), 0) < 0) {
+    if (send(client_sockets[client_id], message.c_str(), message.length(), 0) < 0) {
         perror("error: send() failed");
     }
 }
