@@ -49,15 +49,19 @@ void ServerController::send_call(const std::string& message, int client_number) 
     server->send_message(message, client_number);
 }
 
-void ServerController::add_game(const Game& game) {
-    current_games.push_back(game);
+void ServerController::add_game(int id, const Game& game) {
+    current_games[id] = game;
 }
 
 void ServerController::delete_game(int game_id) {
-    current_games.erase(current_games.begin() + game_id);
+    current_games.erase(game_id);
 }
 
 std::vector<Game> ServerController::game_list() {
-    return current_games;
+    std::vector<Game> games;
+    for (const auto& pair : current_games) {
+        games.push_back(pair.second);
+    }
+    return games;
 }
 

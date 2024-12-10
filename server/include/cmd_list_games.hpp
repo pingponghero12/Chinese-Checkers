@@ -23,11 +23,11 @@ public:
     CmdListGames(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_number) {
-        const auto& games = controller.game_list();
+        std::vector<Game> games = controller.game_list();
 
         std::string out = "";
         for (int i=0; i < games.size(); i++) {
-            out = out + std::to_string(i) + "\n";
+            out = out + std::to_string(games[i].get_id()) + " - " + std::to_string(games[i].get_players()) + "/" + std::to_string(games[i].get_game_type()) + "\n";
         }
         controller.send_call(out, client_number);
     }

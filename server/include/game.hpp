@@ -17,8 +17,17 @@
 
 class Game {
 public:
-    Game() {};
+    Game() {}
+    Game(int game_type, int client_number);
     ~Game() = default;
+
+    int get_id();
+    int get_game_type();
+    int get_players();
+private:
+    std::vector<int> players;
+    int id;
+    int game_type;
 };
 
 #endif // __GAME__

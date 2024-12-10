@@ -24,8 +24,13 @@ public:
     CmdAddGame(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_number) {
-        Game* game = new Game();
-        controller.add_game(*game);
+        if (args.size() != 1) {
+            std::cerr << "Error: must set number of players" << std::endl;
+            return;
+        }
+
+        Game game(args[0], client_number);
+        controller.add_game(client_number, game);
 
         controller.send_call("Added game\n", client_number);
     }

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Board.h"
+#include "board.hpp"
 #include <vector>
 
 

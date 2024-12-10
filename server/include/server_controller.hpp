@@ -28,14 +28,14 @@ public:
     void parse_call(const std::string& message, int client_number);
     void send_call(const std::string& message, int client_number);
 
-    void add_game(const Game& game);
+    void add_game(int id, const Game& game);
     void delete_game(int game_id);
     std::vector<Game> game_list();
 
 private:
     Server* server;
     std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
-    std::vector<Game> current_games;
+    std::unordered_map<int, Game> current_games;
     void initialize_commands();
 };
 
