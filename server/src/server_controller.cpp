@@ -89,5 +89,5 @@ void ServerController::update_player_status(int client_id, int status) {
 
 int ServerController::get_player_status(int client_id) const {
     std::lock_guard<std::mutex> lock(status_mutex);
-    return player_status[client_id];
+    return player_status.at(client_id);
 }
