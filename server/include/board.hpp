@@ -7,12 +7,6 @@
 class Board {
 private:
     int size;
-    int first_row_pins;
-    int HEIGHT;
-    int WIDTH;
-    int middle;
-    int left_middle;
-    int right_middle;
     std::vector<std::vector<char>> Fileds;
 
     
@@ -29,10 +23,11 @@ public:
     void fill_bot_left(char x);
     void fill_bot_right(char x);
     void setup_board(int num_players);
-    void move_checker();
+    void move_checker(int x1, int y1, int x2, int y2);
     bool check_legality();
     void showBoard();
     void fill_hexagon();
+    
 };
 
 #endif
