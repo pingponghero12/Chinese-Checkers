@@ -1,7 +1,7 @@
 #include "game.hpp"
 
-Game::Game(int number_of_players, int client_number, ServerController* controller_ptr) : id(client_number), game_type(number_of_players), controller(controller_ptr) {
-    players.push_back(client_number);
+Game::Game(int number_of_players, int client_id, ServerController* controller_ptr) : id(client_id), game_type(number_of_players), controller(controller_ptr) {
+    players.push_back(client_id);
 }
 
 int Game::get_id() {
@@ -16,18 +16,18 @@ int Game::get_players() {
     return players.size();
 }
 
-void Game::add_player(int client_number) {
-    players.push_back(client_number);
+void Game::add_player(int client_id) {
+    players.push_back(client_id);
 }
 
-void Game::remove_player(int client_number) {
-    auto it = std::find(players.begin(), players.end(), client_number);
+void Game::remove_player(int client_id) {
+    auto it = std::find(players.begin(), players.end(), client_id);
     if (it == players.end()) {
         std::cerr << "Error: Player not found in the game" << std::endl;
         return;
     }
 
-    if (id == client_number) {
+    if (id == client_id) {
         end();
     }
     if (it != players.end()) {
@@ -54,8 +54,8 @@ void Game::end() {
     }
 }
 
-void Game::move(int client_number, int x, int y) {
-    auto it = std::find(players.begin(), players.end(), client_number);
+void Game::move(int client_id, int x, int y) {
+    auto it = std::find(players.begin(), players.end(), client_id);
     std::string out = "Player " + std::to_string(*it) + " moved to: " + std::to_string(x) + std::to_string(y) + "\n";
     for (const auto& client_id : players) {
         controller->send_call(out, client_id);

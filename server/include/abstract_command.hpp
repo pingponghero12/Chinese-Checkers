@@ -7,7 +7,7 @@
 class AbstractCommand {
 public:
     virtual ~AbstractCommand() = default;
-    virtual void execute(const std::vector<int>& args, int client_number) = 0;
+    virtual void execute(const std::vector<int>& args, int client_id) = 0;
 };
 
 #endif // __ABSTRACTCOMMAND__

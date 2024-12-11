@@ -23,19 +23,19 @@ class CmdMove : public AbstractCommand {
 public:
     CmdMove(ServerController& controller) : controller(controller) {}
 
-    void execute(const std::vector<int>& args, int client_number) {
+    void execute(const std::vector<int>& args, int client_id) {
         if (args.size() != 2) {
             std::cerr << "Error: <x> <y>" << std::endl;
             return;
         }
 
-        int game_id = controller.get_player_status(client_number);
+        int game_id = controller.get_player_status(client_id);
         int x = args[0];
         int y = args[1];
 
         {
             std::lock_guard<std::mutex> lock(controller.status_mutex);
-            controller.current_games[game_id].move(client_number, x, y);
+            controller.current_games[game_id].move(client_id, x, y);
         }
     }
 

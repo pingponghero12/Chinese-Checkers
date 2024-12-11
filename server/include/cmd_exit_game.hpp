@@ -23,28 +23,28 @@ class CmdExitGame : public AbstractCommand {
 public:
     CmdExitGame(ServerController& controller) : controller(controller) {}
 
-    void execute(const std::vector<int>& args, int client_number) {
+    void execute(const std::vector<int>& args, int client_id) {
         if (args.size() != 0) {
             std::cerr << "Error: function takes no args" << std::endl;
             return;
         }
 
-        int game_id = controller.get_player_status(client_number);
-        controller.update_player_status(client_number, -1);
+        int game_id = controller.get_player_status(client_id);
+        controller.update_player_status(client_id, -1);
 
         {
             std::lock_guard<std::mutex> lock(controller.games_mutex);
             auto it = controller.current_games.find(game_id);
             if (it != controller.current_games.end()) {
-                it->second.remove_player(client_number);
+                it->second.remove_player(client_id);
             } else {
                 std::cerr << "Error: Game not found" << std::endl;
-                controller.send_call("Error: Game not found\n", client_number);
+                controller.send_call("Error: Game not found\n", client_id);
                 return;
             }
         }
 
-        controller.send_call("Exited game\n", client_number);
+        controller.send_call("Exited game\n", client_id);
     }
 
 private:

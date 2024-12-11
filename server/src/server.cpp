@@ -70,7 +70,7 @@ void Server::server_input_thread() {
 }
 
 void Server::loop_new_clients() {
-    int client_number = 0;
+    int client_id = 0;
 
     while (true) {
         int new_socket;
@@ -83,22 +83,22 @@ void Server::loop_new_clients() {
             continue;
         }
 
-        std::cout << "New client connected: Client[" << client_number << "], IP: " 
+        std::cout << "New client connected: Client[" << client_id << "], IP: " 
                   << inet_ntoa(client_addr.sin_addr) << "\n";
 
-        controller->update_player_status(client_number, -1);
+        controller->update_player_status(client_id, -1);
 
         // Personally I'm more of lock() unlock() guy
         {
             std::lock_guard<std::mutex> lock(client_mutex);
-            client_sockets[client_number] = new_socket;
+            client_sockets[client_id] = new_socket;
         }
 
         // New client thread
-        std::thread client_thread(&Server::handle_client, this, new_socket, client_number, client_addr);
+        std::thread client_thread(&Server::handle_client, this, new_socket, client_id, client_addr);
         client_thread.detach();
 
-        client_number++;
+        client_id++;
     }
 }
 
@@ -124,7 +124,7 @@ void Server::send_message(const std::string& message, const int& client_id) {
     }
 }
 
-void Server::handle_client(int client_socket, int client_number, struct sockaddr_in client_addr) {
+void Server::handle_client(int client_socket, int client_id, struct sockaddr_in client_addr) {
     char buffer[BUFFER_SIZE];
     while (true) {
         // Clean buffer
@@ -133,7 +133,7 @@ void Server::handle_client(int client_socket, int client_number, struct sockaddr
 
         // Check for error or disconnect
         if (bytes_read <= 0) {
-            std::cout << "Client[" << client_number << "] disconnected. IP: " 
+            std::cout << "Client[" << client_id << "] disconnected. IP: " 
                       << inet_ntoa(client_addr.sin_addr) << "\n";
 
             close(client_socket);
@@ -142,13 +142,13 @@ void Server::handle_client(int client_socket, int client_number, struct sockaddr
 
         // Received buffor to string
         std::string message = std::string(buffer);
-        std::cout << "Client[" << client_number << "]: " << message;
-        controller->parse_call(message, client_number);
+        std::cout << "Client[" << client_id << "]: " << message;
+        controller->parse_call(message, client_id);
     }
 
     // Deletion of disconnected client from list of active
     {
         std::lock_guard<std::mutex> lock(client_mutex);
-        client_sockets.erase(client_number);
+        client_sockets.erase(client_id);
     }
 }

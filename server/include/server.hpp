@@ -28,7 +28,7 @@ public:
 
     void send_message(const std::string& message, const int& client_id);
     void broadcast_message(const std::string& message);
-    void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr);
+    void handle_client(int client_socket, int client_id, struct sockaddr_in client_addr);
 
 private:
     int port;
