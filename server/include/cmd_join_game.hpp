@@ -30,10 +30,19 @@ public:
         }
 
         int game_id = args[0];
-
         controller.update_player_status(client_number, game_id);
 
-        controller.current_games[game_id].add_player(client_number);
+        {
+            std::lock_guard<std::mutex> lock(controller.games_mutex);
+            auto it = controller.current_games.find(game_id);
+            if (it != controller.current_games.end()) {
+                it->second.add_player(client_number);
+            } else {
+                std::cerr << "Error: Game not found" << std::endl;
+                controller.send_call("Error: Game not found\n", client_number);
+                return;
+            }
+        }
 
         controller.send_call("Joined game\n", client_number);
     }

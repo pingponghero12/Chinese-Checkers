@@ -32,10 +32,17 @@ public:
         int game_id = controller.get_player_status(client_number);
         controller.update_player_status(client_number, -1);
 
-        std::cout << "Line 35 \n";
-        std::cout << "Line 35 - after \n";
-
-        controller.current_games[game_id].remove_player(client_number);
+        {
+            std::lock_guard<std::mutex> lock(controller.games_mutex);
+            auto it = controller.current_games.find(game_id);
+            if (it != controller.current_games.end()) {
+                it->second.remove_player(client_number);
+            } else {
+                std::cerr << "Error: Game not found" << std::endl;
+                controller.send_call("Error: Game not found\n", client_number);
+                return;
+            }
+        }
 
         controller.send_call("Exited game\n", client_number);
     }

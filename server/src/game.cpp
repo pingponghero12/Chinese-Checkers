@@ -1,10 +1,7 @@
 #include "game.hpp"
 
-Game::Game(int number_of_players, int client_number, ServerController* controller) {
-    id = client_number;
-    game_type = number_of_players;
+Game::Game(int number_of_players, int client_number, ServerController* controller_ptr) : id(client_number), game_type(number_of_players), controller(controller_ptr) {
     players.push_back(client_number);
-    controller = controller;
 }
 
 int Game::get_id() {

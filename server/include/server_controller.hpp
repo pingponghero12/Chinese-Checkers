@@ -23,7 +23,7 @@ class Game;
 
 class ServerController {
 public:
-    ServerController(Server* server);
+    ServerController(Server* server_ptr);
     ~ServerController() = default;
 
     void parse_call(const std::string& message, int client_number);
@@ -37,6 +37,9 @@ public:
     void update_player_status(int client_number, int status);
     int get_player_status(int client_number);
     std::unordered_map<int, Game> current_games;
+
+    std::mutex games_mutex;
+    std::mutex status_mutex;
 
 private:
     Server* server;

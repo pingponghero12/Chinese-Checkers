@@ -21,7 +21,7 @@ class ServerController;
 class Game {
 public:
     Game() {}
-    Game(int game_type, int client_number, ServerController* controller);
+    Game(int game_type, int client_number, ServerController* controller_ptr);
     ~Game() = default;
 
     int get_id();
