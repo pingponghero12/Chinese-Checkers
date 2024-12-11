@@ -53,3 +53,11 @@ void Game::end() {
         std::cerr << "Error: Controller is null" << std::endl;
     }
 }
+
+void Game::move(int client_number, int x, int y) {
+    auto it = std::find(players.begin(), players.end(), client_number);
+    std::string out = "Player " + std::to_string(*it) + " moved to: " + std::to_string(x) + std::to_string(y) + "\n";
+    for (const auto& client_id : players) {
+        controller->send_call(out, client_id);
+    }
+}

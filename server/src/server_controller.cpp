@@ -5,6 +5,7 @@
 #include "cmd_list_games.hpp"
 #include "cmd_join_game.hpp"
 #include "cmd_exit_game.hpp"
+#include "cmd_move.hpp"
 
 ServerController::ServerController(Server* server_ptr) : server(server_ptr) {
     server = server;
@@ -15,6 +16,7 @@ void ServerController::initialize_commands() {
     command_registry_[1] = std::make_unique<CmdAddGame>(*this);
     command_registry_[2] = std::make_unique<CmdListGames>(*this);
     command_registry_[3] = std::make_unique<CmdJoinGame>(*this);
+    command_registry_[4] = std::make_unique<CmdMove>(*this);
     command_registry_[5] = std::make_unique<CmdExitGame>(*this);
 }
 
@@ -58,7 +60,6 @@ void ServerController::parse_call(const std::string& message, int client_number)
         return;
     }
 
-    std::cout << "execute " <<args[0]<< std::endl;
     auto it = command_registry_.find(command_index);
     if (it != command_registry_.end()) {
         it->second->execute(args, client_number);
