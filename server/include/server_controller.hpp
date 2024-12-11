@@ -19,6 +19,7 @@
 #include "abstract_command.hpp"
 
 class Server;
+class Game;
 
 class ServerController {
 public:
@@ -34,12 +35,12 @@ public:
 
     // Status =-1 if not in game, if in game =game_id
     void update_player_status(int client_number, int status);
-    void add_player_to_game(int client_number, int id);
+    int get_player_status(int client_number);
+    std::unordered_map<int, Game> current_games;
 
 private:
     Server* server;
     std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
-    std::unordered_map<int, Game> current_games;
     // Client_id to current game or -1 for not in game
     std::unordered_map<int, int> player_status;
 

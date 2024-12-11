@@ -4,6 +4,7 @@
 #include "cmd_add_game.hpp"
 #include "cmd_list_games.hpp"
 #include "cmd_join_game.hpp"
+#include "cmd_exit_game.hpp"
 
 ServerController::ServerController(Server* server) : server(server) {
     server = server;
@@ -14,6 +15,7 @@ void ServerController::initialize_commands() {
     command_registry_[1] = std::make_unique<CmdAddGame>(*this);
     command_registry_[2] = std::make_unique<CmdListGames>(*this);
     command_registry_[3] = std::make_unique<CmdJoinGame>(*this);
+    command_registry_[5] = std::make_unique<CmdExitGame>(*this);
 }
 
 std::vector<int> parse_stvi(const std::string& message) {
@@ -70,7 +72,6 @@ std::vector<Game> ServerController::game_list() {
 void ServerController::update_player_status(int client_number, int status) {
     player_status[client_number] = status;
 }
-
-void ServerController::add_player_to_game(int client_number, int id) {
-    current_games[id].add_player(client_number);
+int ServerController::get_player_status(int client_number) {
+    return player_status[client_number];
 }

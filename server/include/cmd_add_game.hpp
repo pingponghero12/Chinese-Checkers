@@ -29,7 +29,7 @@ public:
             return;
         }
 
-        Game game(args[0], client_number);
+        Game game(args[0], client_number, &controller);
         controller.add_game(client_number, game);
         controller.update_player_status(client_number, client_number);
 

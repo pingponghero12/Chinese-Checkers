@@ -29,8 +29,11 @@ public:
             return;
         }
 
-        controller.update_player_status(client_number, args[0]);
-        controller.add_player_to_game(client_number, args[0]);
+        int game_id = args[0];
+
+        controller.update_player_status(client_number, game_id);
+
+        controller.current_games[game_id].add_player(client_number);
 
         controller.send_call("Joined game\n", client_number);
     }

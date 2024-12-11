@@ -1,9 +1,10 @@
 #include "game.hpp"
 
-Game::Game(int number_of_players, int client_number) {
+Game::Game(int number_of_players, int client_number, ServerController* controller) {
     id = client_number;
     game_type = number_of_players;
     players.push_back(client_number);
+    controller = controller;
 }
 
 int Game::get_id() {
@@ -24,7 +25,34 @@ void Game::add_player(int client_number) {
 
 void Game::remove_player(int client_number) {
     auto it = std::find(players.begin(), players.end(), client_number);
+    if (it == players.end()) {
+        std::cerr << "Error: Player not found in the game" << std::endl;
+        return;
+    }
+
+    if (id == client_number) {
+        end();
+    }
     if (it != players.end()) {
         players.erase(it);
+    }
+}
+
+void Game::end() {
+    for (const auto& player : players) {
+        if (controller) {
+            controller->send_call("Game ended\n", player);
+            controller->update_player_status(player, -1);
+        }
+        else {
+            std::cerr << "Error: Controller is null" << std::endl;
+        }
+    }
+    
+    if (controller) {
+        controller->delete_game(id);
+    }
+    else {
+        std::cerr << "Error: Controller is null" << std::endl;
     }
 }
