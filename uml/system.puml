@@ -47,27 +47,39 @@ package "Server System" {
     }
 
     class AbstractCommand {
-    	+ void execute(const std::vector<int>& args, int client_number)
-        --
         // Abstract Command for Commands design pattern
+        --
+    	+ void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdAddGame {
-    	+ void execute(const std::vector<int>& args, int client_number)
-        --
         // Add game command
+        --
+    	+ void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdListGames {
-    	+ void execute(const std::vector<int>& args, int client_number)
-        --
 	// List games to viever
+        --
+    	+ void execute(const std::vector<int>& args, int client_number)
     }
 
-    class CmdDeleteGame {
-    	+ void execute(const std::vector<int>& args, int client_number)
+    class CmdJoinGame {
+	// Join game
 	--
-	// Delete game
+    	+ void execute(const std::vector<int>& args, int client_number)
+    }
+
+    class CmdMove {
+	// Move in game
+	--
+    	+ void execute(const std::vector<int>& args, int client_number)
+    }
+
+    class CmdExitGame {
+	// Exit game
+	--
+    	+ void execute(const std::vector<int>& args, int client_number)
     }
 
     class Game {
@@ -108,15 +120,21 @@ Game --> Board : contains a board for each game
 
 CmdAddGame -right-> ServerController
 CmdListGames -right-> ServerController
-CmdDeleteGame -right-> ServerController
+CmdJoinGame -right-> ServerController
+CmdMove -right-> ServerController
+CmdExitGame -right-> ServerController
 
 ServerController --> AbstractCommand
 CmdAddGame -|> AbstractCommand
 CmdListGames -|> AbstractCommand
-CmdDeleteGame -|> AbstractCommand
+CmdJoinGame -|> AbstractCommand
+CmdMove -|> AbstractCommand
+CmdExitGame -|> AbstractCommand
 
 ServerController -right-> CmdAddGame
 ServerController -right-> CmdListGames
-ServerController -right-> CmdDeleteGame
+ServerController -right-> CmdJoinGame
+ServerController -right-> CmdMove
+ServerController -right-> CmdExitGame
 
 @enduml
