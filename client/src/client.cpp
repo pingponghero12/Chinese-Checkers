@@ -1,11 +1,11 @@
 #include <iostream>
 #include <thread>
 #include <string>
-#include <sstream> // Do obsługi istringstream i ostringstream
+#include <sstream> 
 #include <cstring>
 #include <unistd.h>
 #include <netinet/in.h>
-#include <arpa/inet.h> // For inet_pton
+#include <arpa/inet.h> 
 #include <sys/socket.h>
 
 #define PORT 8080
@@ -30,9 +30,9 @@ std::string transformMessage(const std::string& input) {
     std::ostringstream oss;
 
     std::string command;
-    iss >> command; // Pobiera pierwszy wyraz wiadomości
+    iss >> command; 
 
-    // Zamiana komend tekstowych na liczby
+    
     if (command == "create") {
         oss << "1";
     } else if (command == "list") {
@@ -42,13 +42,13 @@ std::string transformMessage(const std::string& input) {
     } else if (command == "move") {
         oss << "4";
     } else {
-        // Jeśli nie rozpoznano komendy, pozostaw ją niezmienioną
+        // If unrecognized leave as is
         oss << command;
     }
 
-    // Dodaj resztę argumentów
+    // Add the rest of arguments
     std::string rest;
-    std::getline(iss, rest); // Pobiera pozostałą część wiadomości
+    std::getline(iss, rest); 
     oss << rest;
 
     return oss.str();
@@ -93,10 +93,10 @@ int main() {
         std::getline(std::cin, message);
         if (message.empty()) continue;
 
-        // Zamień tekstową komendę na numeryczną
+        // Change string command into integer
         std::string transformedMessage = transformMessage(message);
 
-        transformedMessage += "\n"; // Dodanie nowej linii
+        transformedMessage += "\n"; 
         send(sock, transformedMessage.c_str(), transformedMessage.length(), 0);
     }
 
