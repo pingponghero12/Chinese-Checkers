@@ -28,6 +28,13 @@ std::vector<int> parse_stvi(const std::string& message) {
     return args;
 }
 
+bool ServerController::in_lobby(int client_number) {
+    std::lock_guard<std::mutex> lock(status_mutex);
+
+    if (player_status.at(client_number) == -1) return false;
+    return true;
+}
+
 void ServerController::parse_call(const std::string& message, int client_number) {
     std::vector<int> args = parse_stvi(message);
 
@@ -35,9 +42,21 @@ void ServerController::parse_call(const std::string& message, int client_number)
         return;
     }
 
-
     int command_index = args[0];
     args.erase(args.begin());
+
+    std::array<int, 3> main_cmds = {1, 2, 3};
+
+    // Check if call illegal
+    auto itt = std::find(std::begin(main_cmds), std::end(main_cmds), command_index);
+    if (in_lobby(client_number) && itt != std::end(main_cmds)) {
+        send_call("You are in lobby, you need to exit to use that command.\n", client_number);
+        return;
+    }
+    else if (!in_lobby(client_number) && itt == std::end(main_cmds)) {
+        send_call("You are in lobby, you need to exit to use that command.\n", client_number);
+        return;
+    }
 
     std::cout << "execute " <<args[0]<< std::endl;
     auto it = command_registry_.find(command_index);
@@ -46,6 +65,7 @@ void ServerController::parse_call(const std::string& message, int client_number)
     }
     else {
         std::cerr << "Command not found: " << command_index << std::endl;
+        send_call("Command not found.\n", client_number);
     }
 }
 

@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <memory>
 #include <sstream>
+#include <array>
 
 #include "game.hpp"
 #include "abstract_command.hpp"
@@ -48,6 +49,7 @@ private:
     std::unordered_map<int, int> player_status;
 
     void initialize_commands();
+    bool in_lobby(int client_number);
 };
 
 #endif // __SERVERCONTROLLER__
