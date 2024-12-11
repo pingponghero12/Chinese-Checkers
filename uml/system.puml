@@ -95,7 +95,6 @@ package "Server System" {
 	+ void add_player(int client_number);
 	+ void remove_player(int client_number);
 
-	+ void game_logic() // Called after each function
 	+ void move(int client_id)
 	+ void end()
         --
@@ -106,9 +105,25 @@ package "Server System" {
     }
 
     class Board {
-        + void setup_board(int num_players)
+        +Board(int size)
+
+        + void setup_board(int num_players);
+        + void move_checker(int x1, int y1, int x2, int y2); //moves the ckecker
+        + bool check_legality(); //checks if a move is legal
+        + void showBoard();
+        + void fill_empty_space();
+        + void fill_top_triangle(char x);
+        + void fill_bottom_triangle(char x);
+        + void fill_top_left(char x);
+        + void fill_top_right(char x);
+        + void fill_bot_left(char x);
+        + void fill_bot_right(char x);
+        + void fill_hexagon();
+
         --
-        // Details about the board's layout and logic can go here
+        - int size;
+        - std::vector<std::vector<char>> Fileds;
+        
     }
 }
 

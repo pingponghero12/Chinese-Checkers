@@ -1,0 +1,31 @@
+@startuml
+
+actor User as "User"
+participant Main as "main()"
+participant Socket as "Socket API"
+participant "receiveMessages" as Receiver
+
+User -> Main: Start the program
+Main -> Socket: Creates a socket
+Main -> Socket: Connects to the server
+alt Connection successful
+    Main -> User: "Connected to server" and options menu
+    Main -> Receiver: Starts the message receiving thread
+    group Sending messages
+        User -> Main: Enters a command
+        Main -> Main: transformMessage()
+        Main -> Socket: Sends the message
+    end
+    Receiver -> Socket: Receives a message
+    Receiver -> User: Displays the message
+else Connection failed
+    Main -> User: "Connection failed" or "Invalid address"
+end
+
+alt Receiving data
+    Receiver -> Main: "Disconnected from server"
+    Main -> Socket: Closes the connection
+    Main -> Main: Exits the program
+end
+
+@enduml
