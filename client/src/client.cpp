@@ -41,6 +41,8 @@ std::string transformMessage(const std::string& input) {
         oss << "3";
     } else if (command == "move") {
         oss << "4";
+    }else if (command == "exit"){
+        oss << "5";
     } else {
         // If unrecognized leave as is
         oss << command;
@@ -80,10 +82,11 @@ int main() {
 
     std::cout << "Connected to server.\n";
     std::cout << "Choose an option:" << std::endl;
-    std::cout << "1. Create game (type create <number of players>)" << std::endl;
-    std::cout << "2. List games" << std::endl;
-    std::cout << "3. Join game (type join <game id>)" << std::endl;
-    std::cout << "4. Move" << std::endl;
+    std::cout << "1. Create game (type: create <number of players>)" << std::endl;
+    std::cout << "2. List games (type: list)" << std::endl;
+    std::cout << "3. Join game (type: join <game id>)" << std::endl;
+    std::cout << "4. Move (type: move <x y>)" << std::endl;
+    std::cout << "5. Exit game (type: exit)" << std::endl;
 
     std::thread receiver(receiveMessages, sock);
     receiver.detach();
