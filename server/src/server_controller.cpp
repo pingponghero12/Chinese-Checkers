@@ -59,7 +59,7 @@ void ServerController::add_game(int id, const Game& game) {
 }
 
 void ServerController::delete_game(int game_id) {
-    std::lock_guard<std::mutex> lock(games_mutex);
+    // no lock to avoid deadlock
     current_games.erase(game_id);
 }
 
