@@ -11,16 +11,18 @@ package "Server System" {
         + ~Server()
         + bool init_server()
         + void start_server()
+	+ void send_message(const std::string& message, const int& client_id)
+        + void broadcast_message(const std::string& message)
+        + void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr)
         --
         - int port
         - int server_fd
-        - std::vector<int> client_sockets
+    	- std::unordered_map<int, int> client_sockets;
         - std::mutex client_mutex
+	- ServerController* controller;
         --
         - void server_input_thread()
         - void loop_new_clients()
-        - void broadcast_message(const std::string& message)
-        - void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr)
     }
 
     class ServerController {
@@ -29,23 +31,66 @@ package "Server System" {
 	+ void parse_call(const std::string& message, int client_number);
 	+ void send_call(const std::string& message, int client_number);
 
-	+ std::vector<Game> game_list()
 	+ void add_game(Game game)
 	+ void delete_game(int game_id)
+	+ std::vector<Game> game_list()
+
+	+ void update_player_status(int client_number, int status)
+	+ void add_player_to_game(int client_number, int id)
         --
-        - std::vector<Game> current_games
+	- Server* server;
+	- std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
+	- std::unordered_map<int, Game> current_games
+	- std::unordered_map<int, int> player_status : // Client_id to current game or -1 for not in game
+	--
+	- void initialize_commands();
+    }
+
+    class AbstractCommand {
+    	+ void execute(const std::vector<int>& args, int client_number)
+        --
+        // Abstract Command for Commands design pattern
+    }
+
+    class CmdAddGame {
+    	+ void execute(const std::vector<int>& args, int client_number)
+        --
+        // Add game command
+    }
+
+    class CmdListGames {
+    	+ void execute(const std::vector<int>& args, int client_number)
+        --
+	// List games to viever
+    }
+
+    class CmdDeleteGame {
+    	+ void execute(const std::vector<int>& args, int client_number)
+	--
+	// Delete game
     }
 
     class Game {
         // Game logic and move functions.
 	--
-	+ 
+	+ Game()
+	+ ~Game()
+
+	+ int get_id()
+	+ int get_game_type() // Max number of players in game
+	+ int get_players() // Current players in lobby
+
+	+ void add_player(int client_number);
+	+ void remove_player(int client_number);
+
 	+ void game_logic() // Called after each function
 	+ void move(int client_id)
 	+ void end()
         --
-        - std::vector<std::pair<int, int>> client_to_player_mapping
-        - Board board
+        - std::vector<int> players;
+	- int id;
+	- int game_type;
+	- Board board
     }
 
     class Board {
@@ -60,4 +105,18 @@ Server --> ServerController : calls functions
 ServerController --> Server : calls functions
 ServerController --> Game : manages multiple games
 Game --> Board : contains a board for each game
+
+CmdAddGame -right-> ServerController
+CmdListGames -right-> ServerController
+CmdDeleteGame -right-> ServerController
+
+ServerController --> AbstractCommand
+CmdAddGame -|> AbstractCommand
+CmdListGames -|> AbstractCommand
+CmdDeleteGame -|> AbstractCommand
+
+ServerController -right-> CmdAddGame
+ServerController -right-> CmdListGames
+ServerController -right-> CmdDeleteGame
+
 @enduml
