@@ -15,8 +15,6 @@
 #include <memory>
 #include <sstream>
 
-#include "server_controller.hpp"
-
 class ServerController;
 class Game {
 public:

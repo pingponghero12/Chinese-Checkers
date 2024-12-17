@@ -12,7 +12,6 @@
 #include "abstract_command.hpp"
 
 class Server;
-class Game;
 
 class ServerController {
 public:

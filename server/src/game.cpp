@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "server_controller.hpp"
 
 Game::Game(int number_of_players, int client_id, ServerController* controller_ptr) : id(client_id), game_type(number_of_players), controller(controller_ptr) {
     players.push_back(client_id);
