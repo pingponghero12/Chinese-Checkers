@@ -1,0 +1,41 @@
+@startuml
+start
+:Start Game;
+
+while (true) is (Main Menu)
+    :Display Main Menu;
+    :User selects an option;
+
+    partition "Main Menu Options" {
+        if (Option == "About") then (Yes)
+            :Show About Screen;
+            :Return to Main Menu;
+        elseif (Option == "Lobbies") then (Yes)
+            :Show Lobbies Screen;
+            :User selects to Join Game;
+            
+            :Wait for Players;
+            
+            if (Host Leaves?) then (Yes)
+                :Game Ends;
+                :Return to Lobbies;
+            else
+                if (User chooses to Leave?) then (Yes)
+                    :Return to Lobbies;
+                else
+                    :Play Game;
+                    :Game Ends;
+                    :Return to Lobbies;
+                endif
+            endif
+        elseif (Option == "Exit") then (Yes)
+            :Exit Game;
+            stop
+        else
+            :Invalid Option Selected;
+            :Return to Main Menu;
+        endif
+    }
+endwhile
+
+@enduml
