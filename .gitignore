@@ -3,3 +3,4 @@ client/old/
 server/build/*
 server/old/
 *__pycache__
+*.cache
