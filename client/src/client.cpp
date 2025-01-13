@@ -21,6 +21,7 @@ Client::~Client() {
 
 void Client::receive_messages() {
     char buffer[BUFFER_SIZE];
+    std::cout << "started reveive_messages\n";
     while (connected) {
         memset(buffer, 0, BUFFER_SIZE);
         int bytes_read = read(sock, buffer, BUFFER_SIZE);
@@ -30,7 +31,9 @@ void Client::receive_messages() {
             close(sock);
             break;
         }
-        std::cout << buffer << endl;
+
+        std::cout << "recevid cpp" <<  buffer << std::endl;
+
         if (message_callback) {
             message_callback(std::string(buffer));
         }

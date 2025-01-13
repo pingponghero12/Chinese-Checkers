@@ -16,7 +16,6 @@ public:
     void start_receiving();
     void send_message(const std::string& message);
     void disconnect();
-
     void set_message_callback(MessageCallback callback);
 
 private:

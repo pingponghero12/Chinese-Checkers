@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox
+from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
 from game_window import GameWindow
@@ -7,12 +8,31 @@ from about_dialog import AboutDialog
 
 import client_module
 
+class Communicator(QObject):
+    message = pyqtSignal(str)
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Chinese Checkers")
         self.setGeometry(100, 100, 800, 600)
         self.init_ui()
+
+        self.communicator = Communicator()
+        self.communicator.message.connect(self.handle_server_message)
+
+        self.client = client_module.Client("127.0.0.1", 8080)
+        self.client.set_message_callback(self.on_message_received)
+
+        if not self.client.connect():
+            error_box = QMessageBox()
+            error_box.setIcon(QMessageBox.Critical)
+            error_box.setText("Could not connect to server.")
+            error_box.setWindowTitle("Connection Error")
+            error_box.exec_()
+            sys.exit(1)
+
+        self.client.start_receiving()
 
     def init_ui(self):
         self.stack = QStackedWidget()
@@ -32,6 +52,8 @@ class MainWindow(QWidget):
         self.stack.setCurrentWidget(self.main_menu)
 
     def show_lobbies(self):
+        print("show lobby py")
+        self.client.send_message("list")
         self.stack.setCurrentWidget(self.lobbies_list)
 
     def show_about(self):
@@ -45,18 +67,19 @@ class MainWindow(QWidget):
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
+    def on_message_received(self, message):
+        self.communicator.message.emit(message)
+
+    def handle_server_message(self, message):
+        QMessageBox.information(self, "connected", "To server");
+
+    def closeEvent(self, event):
+            self.client.disconnect()
+            event.accept()
+
+
 def main():
     app = QApplication(sys.argv)
-
-    client = client_module.Client("127.0.0.1", 8080)
-
-    if not client.connect():
-        error_box = QMessageBox()
-        error_box.setIcon(QMessageBox.Critical)
-        error_box.setText("Could not connect to server.")
-        error_box.setWindowTitle("Connection Error")
-        error_box.exec_()
-        sys.exit(1)
 
     window = MainWindow()
     window.show()
