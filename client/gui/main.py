@@ -5,6 +5,8 @@ from lobbies_list import LobbiesList
 from game_window import GameWindow
 from about_dialog import AboutDialog
 
+import client_module
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -45,6 +47,17 @@ class MainWindow(QWidget):
 
 def main():
     app = QApplication(sys.argv)
+
+    client = client_module.Client("127.0.0.1", 8080)
+
+    if not client.connect():
+        error_box = QMessageBox()
+        error_box.setIcon(QMessageBox.Critical)
+        error_box.setText("Could not connect to server.")
+        error_box.setWindowTitle("Connection Error")
+        error_box.exec_()
+        sys.exit(1)
+
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

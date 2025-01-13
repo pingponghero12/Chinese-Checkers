@@ -30,6 +30,7 @@ void Client::receive_messages() {
             close(sock);
             break;
         }
+        std::cout << buffer << endl;
         if (message_callback) {
             message_callback(std::string(buffer));
         }
@@ -73,7 +74,7 @@ bool Client::connect_to_server() {
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         perror("Socket creation error");
-        return -1;
+        return false;
     }
 
     memset(&serv_addr, 0, sizeof(serv_addr));
@@ -82,12 +83,12 @@ bool Client::connect_to_server() {
 
     if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
         std::cerr << "Invalid address/ Address not supported \n";
-        return -1;
+        return false;
     }
 
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         perror("Connection failed");
-        return -1;
+        return false;
     }
 
     connected = true;
@@ -96,7 +97,7 @@ bool Client::connect_to_server() {
 }
 
 void Client::start_receiving() {
-    receiver_thread = std::thread(&Client::receive_messages, port);
+    receiver_thread = std::thread(&Client::receive_messages, this);
     receiver_thread.detach();
 }
 
