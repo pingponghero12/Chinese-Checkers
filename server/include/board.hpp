@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef BOARD_HPP
+#define BOARD_HPP
 
 #include <iostream>
 #include <vector>
@@ -27,6 +27,9 @@ public:
     bool check_legality();
     void showBoard();
     void fill_hexagon();
+    void possible_shifts(int x, int y);
+    void possible_jumps(int x, int y);
+    void next_jump(int x, int y, int a, int b);
     
 };
 
