@@ -8,7 +8,7 @@ class ChineseCheckersBoard(QWidget):
     def __init__(self):
         super().__init__()
         self.setMinimumSize(600, 600)  # Set a minimum size for the board
-        self.hex_size = 30
+        self.hex_size = 15
         self.hexagons = []  # List to store all hexagons
         self.hex_table = {}  # Dictionary to store hexagons in table
         self.hovered_hexagon = None  # Currently hovered hexagon
@@ -26,6 +26,34 @@ class ChineseCheckersBoard(QWidget):
         center_x = self.width() // 2
         center_y = self.height() // 2
 
+        total_layers = 17
+
+        for row in range(total_layers):
+            if row < 4:
+                start_col = 12 - row
+                end_col = 12 + row + 1
+            elif row <= 8:
+                start_col = row - 4
+                end_col = 25 - (row - 4)
+            elif row <= 12:
+                start_col = 4 - (row - 8)
+                end_col = 12 + (row - 8) + 9
+            else:
+                start_col = 12 - (16 - row)
+                end_col = 12 + (16 - row) + 1
+
+            for col in range(start_col, end_col, 2):
+                x = center_x + 1.5 * self.hex_size * (col - 12)
+                y = center_y + 2.5 * self.hex_size * (row - 8) * math.sqrt(3) / 2
+                hexagon = Hexagon(x, y, self.hex_size)
+                self.hexagons.append(hexagon)
+
+                self.hex_table[(row, col)] = hexagon
+
+        '''
+        center_x = self.width() // 2
+        center_y = self.height() // 2
+
         for row in range(-5, 6):
             for col in range(-5, 6):
                 if abs(row + col) > 5:
@@ -36,6 +64,7 @@ class ChineseCheckersBoard(QWidget):
                 self.hexagons.append(hexagon)
                 # Store hexagons in a dictionary with row and col as keys
                 self.hex_table[(row, col)] = hexagon
+        '''
 
     def paintEvent(self, event):
         painter = QPainter(self)
