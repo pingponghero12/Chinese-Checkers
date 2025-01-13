@@ -32,8 +32,6 @@ void Client::receive_messages() {
             break;
         }
 
-        std::cout << "recevid cpp" <<  buffer << std::endl;
-
         if (message_callback) {
             message_callback(std::string(buffer));
         }

@@ -38,7 +38,7 @@ class MainWindow(QWidget):
         self.stack = QStackedWidget()
 
         self.main_menu = MainMenu(self.show_lobbies, self.show_about)
-        self.lobbies_list = LobbiesList(self.join_game, self.show_main_menu)
+        self.lobbies_list = LobbiesList(self.join_game, self.show_main_menu, self.create_game)
         self.game_window = None # Will be created when join lobby
 
         self.stack.addWidget(self.main_menu)
@@ -61,11 +61,27 @@ class MainWindow(QWidget):
         about.exec_()
 
     def join_game(self, lobby_name):
+        self.client.send_message(f"join {lobby_name}")
+
         if self.game_window:
             self.stack.removeWidget(self.game_window)
-        self.game_window = GameWindow(lobby_name, self.show_lobbies)
+        self.game_window = GameWindow(lobby_name, self.leave_game)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
+
+    def create_game(self):
+        print("create_game")
+        self.client.send_message("create 6")
+
+        if self.game_window:
+            self.stack.removeWidget(self.game_window)
+        self.game_window = GameWindow("my game", self.leave_game)
+        self.stack.addWidget(self.game_window)
+        self.stack.setCurrentWidget(self.game_window)
+
+    def leave_game(self):
+        self.client.send_message("exit")
+        self.show_lobbies()
 
     def on_message_received(self, message):
         self.communicator.message.emit(message)
@@ -74,7 +90,7 @@ class MainWindow(QWidget):
         QMessageBox.information(self, "connected", message);
         if message.startswith("lobbies:"):
             lobby_data = message.split(":", 1)[1]
-            lobbies = message.split(",")
+            lobbies = lobby_data.split(",")
 
             self.lobbies_list.list_widget.clear()
             for lobby in lobbies:
