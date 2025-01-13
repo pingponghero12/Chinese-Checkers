@@ -71,7 +71,14 @@ class MainWindow(QWidget):
         self.communicator.message.emit(message)
 
     def handle_server_message(self, message):
-        QMessageBox.information(self, "connected", "To server");
+        QMessageBox.information(self, "connected", message);
+        if message.startswith("lobbies:"):
+            lobby_data = message.split(":", 1)[1]
+            lobbies = message.split(",")
+
+            self.lobbies_list.list_widget.clear()
+            for lobby in lobbies:
+                self.lobbies_list.list_widget.addItem(lobby)
 
     def closeEvent(self, event):
             self.client.disconnect()

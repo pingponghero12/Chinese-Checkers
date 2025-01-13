@@ -6,6 +6,8 @@ class LobbiesList(QWidget):
         super().__init__()
         self.switch_to_game = switch_to_game
         self.switch_to_main = switch_to_main
+        self.list_widget = QListWidget()
+
         self.init_ui()
 
     def init_ui(self):
@@ -17,9 +19,6 @@ class LobbiesList(QWidget):
         layout.addWidget(title)
 
         # Lobby List
-        self.list_widget = QListWidget()
-        for i in range(1, 21):
-            self.list_widget.addItem(f"Lobby {i}")
         layout.addWidget(self.list_widget)
 
         # Buttons
