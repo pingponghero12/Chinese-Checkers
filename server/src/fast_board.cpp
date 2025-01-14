@@ -1,15 +1,15 @@
-#include "standard_board.hpp"
+#include "fast_board.hpp"
 
-Standard_Board::Standard_Board(int board_size) : Board(board_size){
+Fast_Board::Fast_Board(int board_size) : Board(board_size){
     //Constructor for the standard board
 }
 
-bool Standard_Board::check_legality() {
+bool Fast_Board::check_legality() {
     //Check if the move is legal
     return true;
 }
 
-std::vector<std::pair<int, int>> Standard_Board::possible_moves(int x, int y){
+std::vector<std::pair<int, int>> Fast_Board::possible_moves(int x, int y){
     std::vector<std::pair<int, int>> result;
     std::vector<std::pair<int, int>> shifts = possible_shifts(x, y);
     std::vector<std::pair<int, int>> jumps = possible_jumps(x, y, x, y);
@@ -19,7 +19,7 @@ std::vector<std::pair<int, int>> Standard_Board::possible_moves(int x, int y){
     return result;
 }
 
-std::vector<std::pair<int,int>> Standard_Board::possible_shifts(int x, int y){
+std::vector<std::pair<int,int>> Fast_Board::possible_shifts(int x, int y){
     std::vector<std::pair<int, int>> shifts;
     if(get_Field(x + 1, y + 1)=='0'){
         shifts.push_back(std::make_pair(x+1, y+1));
@@ -44,7 +44,7 @@ std::vector<std::pair<int,int>> Standard_Board::possible_shifts(int x, int y){
 
 //x and y are the point to calculate the jump from, a and b are the point from which previous jump was made
 //This function has to guarrentee that you can't jump back to the same place
-std::vector<std::pair<int,int>> Standard_Board::possible_jumps(int x, int y, int a, int b) {
+std::vector<std::pair<int,int>> Fast_Board::possible_jumps(int x, int y, int a, int b) {
     std::vector<std::pair<int, int>> jumps;
 
     auto add_jump = [&](int new_x, int new_y) {
@@ -55,12 +55,28 @@ std::vector<std::pair<int,int>> Standard_Board::possible_jumps(int x, int y, int
         }
     };
 
-    if (get_Field(x-1, y-1) != '0') add_jump(x-2, y-2);
-    if (get_Field(x+1, y+1) != '0') add_jump(x+2, y+2);
-    if (get_Field(x-1, y+1) != '0') add_jump(x-2, y+2);
-    if (get_Field(x+1, y-1) != '0') add_jump(x+2, y-2);
-    if (get_Field(x, y+2) != '0') add_jump(x, y+4);
-    if (get_Field(x, y-2) != '0') add_jump(x, y-4);
+
+    //Fix the range
+    for(int i = 1; i <=5; i++){
+        if(get_Field(x, y + 2*i) != '0'){
+            add_jump(x, y + 4*(i));
+        }
+        if(get_Field(x, y - 2*i) != '0'){
+            add_jump(x, y - 4*(i));
+        }   
+        if(get_Field(x + i, y + i) != '0'){
+            add_jump(x + 2*(i), y + 2*(i));
+        }
+        if(get_Field(x - i, y - i) != '0'){
+            add_jump(x - 2*(i), y - 2*(i));
+        }
+        if(get_Field(x + i, y - i) != '0'){
+            add_jump(x + 2*(i), y - 2*(i));
+        }
+        if(get_Field(x - i, y + i) != '0'){
+            add_jump(x - 2*(i), y + 2*(i));
+        }
+    }
 
     return jumps;
 }
