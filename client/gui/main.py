@@ -68,9 +68,12 @@ class MainWindow(QWidget):
         time.sleep(0.1)
         if self.game_window:
             self.stack.removeWidget(self.game_window)
-        self.game_window = GameWindow(lobby_name, self.leave_game, self.my_id)
+        self.game_window = GameWindow(lobby_name, self.leave_game, self.my_id, self.send_move)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
+
+    def send_move(self, mv):
+        self.client.send_message(f"move {mv[0]} {mv[1]} {mv[2]} {mv[3]}")
 
     def create_game(self):
         print("create_game")
@@ -79,7 +82,7 @@ class MainWindow(QWidget):
         if self.game_window:
             self.stack.removeWidget(self.game_window)
 
-        self.game_window = GameWindow("my game", self.leave_game, 0)
+        self.game_window = GameWindow("my game", self.leave_game, 0, self.send_move)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
@@ -103,6 +106,12 @@ class MainWindow(QWidget):
 
         if message.startswith("joined:"):
             self.my_id = message.split(":", 1)[1]
+
+        if message.startswith("move,"):
+            mv = message.split(",", 1)[1]
+            mv = mv.split(",")
+            mv = [int(x) for x in mv]
+            self.game_window.board.move(mv)
 
     def closeEvent(self, event):
             self.client.disconnect()

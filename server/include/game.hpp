@@ -30,7 +30,7 @@ public:
     void remove_player(int client_id);
 
     void game_logic();
-    void move(int client_id, int x, int y);
+    void move(int client_id, int x1, int y1, int x2, int y2);
     void end();
 private:
     std::vector<int> players;

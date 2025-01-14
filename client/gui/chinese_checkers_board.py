@@ -5,18 +5,20 @@ from hexagon import Hexagon
 import math
 
 class ChineseCheckersBoard(QWidget):
-    def __init__(self, my_id):
+    def __init__(self, my_id, send_move):
         super().__init__()
         self.setMinimumSize(600, 600)  # Set a minimum size for the board
         self.hex_size = 15
         self.hexagons = []  # List to store all hexagons
         self.hex_table = {}  # Dictionary to store hexagons in table
         self.hovered_hexagon = None  # Currently hovered hexagon
+        self.send_move = send_move
         self.create_hexagons()
         self.setMouseTracking(True)
         self.choosen = None
         self.current_player = 0
         self.my_id = my_id
+        self.highlighted = [(0, 12)]
 
     def create_hexagons(self):
         """
@@ -82,45 +84,56 @@ class ChineseCheckersBoard(QWidget):
             QMessageBox.warning(self, "Wrong turn", "Pls wait your turn")
 
     def unhighlight(self):
-        highlighted = [] # test
-        for i in highlighted:
-            hex_table[i].toggle_color("normal")
-            hex_table[i].highlight = False
+        self.highlighted = [] # test
+        for i in self.highlighted:
+            self.hex_table[i].toggle_color("normal")
+            self.hex_table[i].highlight = False
 
     def highlight(self):
-        highlighted = [] # test
-        for i in highlighted:
-            hex_table[i].toggle_color("highlight")
-            hex_table[i].highlight = True
+        for i in self.highlighted:
+            self.hex_table[i].toggle_color("highlight")
+            self.hex_table[i].highlight = True
 
     def handle_hex_click(self, hexagon):
-        """
-        Handles the logic when a hexagon is clicked.
+        if hexagon.player == self.my_id:
+            if (self.choosen != None):
+                self.hex_table[self.choosen].toggle_color("normal")
+                self.unhighlight()
 
-        :param hexagon: The Hexagon object that was clicked.
-        """
-        if (self.current_player != hexagon.player):
-            QMessageBox.warning(self, "Wrong selection", "Pls choose your color")
-            return
+            self.choosen = (hexagon.row, hexagon.col)
+            self.hex_table[self.choosen].toggle_color("choosen")
+            self.highlight()
 
-        if (self.choosen != None):
-            self.hex_table[self.choosen].toggle_color("normal")
-            self.unhighlight()
+            self.dupa()
 
-        self.choosen = (hexagon.row, hexagon.col)
-        self.hex_table[self.choosen].toggle_color("choosen")
+            # Update the display
+            self.update()
+        else:
+            if (self.choosen == None):
+                QMessageBox.warning(self, "Wrong selection", "Pls choose your color")
+            else:
+                if (hexagon.row, hexagon.col) in self.highlighted:
+                    mv = [self.choosen[0], self.choosen[1], hexagon.row, hexagon.col]
+                    self.choosen = None
+                    self.unhighlight()
+                    self.send_move(mv)
 
-        # Call the dupa() function
-        self.dupa()
+    def move(self, mv):
+        print(mv)
 
-        # Update the display
+        self.hex_table[(mv[0], mv[1])].player = -1
+        self.hex_table[(mv[0], mv[1])].toggle_color("normal")
+
+        self.hex_table[(mv[2], mv[3])].player = self.current_player
+        print(f"mov play {self.hex_table[(mv[2], mv[3])].player} {self.current_player}")
+        self.hex_table[(mv[2], mv[3])].toggle_color("normal")
+
+        self.current_player = (self.current_player + 1) % 6
+
         self.update()
 
     def dupa(self):
-        """
-        Example function to be called when a hexagon is clicked.
-        """
-        print("Hexagon clicked! Function dupa() executed.")
+        print("Hexagon clicked")
 
     def hoverMoveEvent(self, event):
         """
