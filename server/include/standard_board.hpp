@@ -5,6 +5,12 @@
 #include <vector>
 #include "board.hpp"
 
+/**
+ * @brief Standard_Board class
+ * The class represents the standard board for the game
+ * The class is initialized with a size
+ * The class is responsible for checking the legality of moves
+ */
 class Standard_Board : public Board {
     public:
         Standard_Board(int board_size);

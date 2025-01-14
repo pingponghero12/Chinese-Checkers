@@ -12,7 +12,13 @@
 #include "server_controller.hpp"
 
 #define BUFFER_SIZE 1024
-
+/**
+ * @brief Server class
+ * The class is responsible for handling the server logic
+ * The class is initialized with a port number
+ * The class is responsible for handling the server socket
+ * The class can send messages to clients or a single client
+ */
 class Server {
 public:
     Server(int port);

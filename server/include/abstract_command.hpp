@@ -3,7 +3,10 @@
 
 #include <vector>
 #include <string>
-
+/**
+ * @brief Abstract class for commands
+ * Executing a command is done by calling the execute function
+ */
 class AbstractCommand {
 public:
     virtual ~AbstractCommand() = default;
