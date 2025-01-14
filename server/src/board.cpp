@@ -118,7 +118,7 @@ void Board::setup_board(int num_players) {
     }
 }
 
-void Board::move_checker(int x1, int y1, int x2, int y2) {
+void Board::move(int x1, int y1, int x2, int y2) {
     if (Fileds[x1][y1] == '0' || Fileds[x1][y1] == ' ') {
         std::cout << "No checker at this position" << std::endl;
         return;
