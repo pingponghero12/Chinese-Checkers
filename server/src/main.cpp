@@ -1,18 +1,14 @@
-#include <iostream>
-#include <thread>
-#include <vector>
-#include <string>
 #include <cstring>
-#include <mutex>
-#include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 
 #include "server.hpp"
 
+#define PORT 8080
+
 int main() {
-    Server server;
+    Server server(PORT);
 
     if (!server.init_server()) {
         return EXIT_FAILURE;
