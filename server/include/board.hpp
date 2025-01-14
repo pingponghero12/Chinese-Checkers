@@ -9,11 +9,9 @@ private:
     int size;
     std::vector<std::vector<char>> Fileds;
 
-    
-    static constexpr char Alphabet[27] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-
 public:
     Board(int board_size);
+    virtual ~Board() = default;
 
     void fill_empty_space();
     void fill_top_triangle(char x);
@@ -24,9 +22,12 @@ public:
     void fill_bot_right(char x);
     void setup_board(int num_players);
     void move_checker(int x1, int y1, int x2, int y2);
-    bool check_legality();
+    virtual bool check_legality() = 0;
     void showBoard();
     void fill_hexagon();
+    void possible_shifts(int x, int y);
+    void possible_jumps(int x, int y);
+    void next_jump(int x, int y, int a, int b);
     
 };
 

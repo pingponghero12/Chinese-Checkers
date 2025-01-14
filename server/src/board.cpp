@@ -154,11 +154,11 @@
         case 6:
 
             fill_top_triangle('1');
-            fill_bottom_triangle('2');
+            fill_bottom_triangle('4');
             fill_bot_right('3');
-            fill_bot_left('4');
-            fill_top_left('5');
-            fill_top_right('6');
+            fill_bot_left('5');
+            fill_top_left('6');
+            fill_top_right('2');
 
             break;
 
@@ -171,21 +171,92 @@
     }
 
     void Board::move_checker(int x1, int y1, int x2, int y2){
+        if(Fileds[x1][y1] == '0' || Fileds[x1][y1] == ' '){
+            std::cout << "No checker at this position" << std::endl;
+            return;
+        }
+        if(Fileds[x2][y2] != '0'){
+            std::cout << "There is already a checker at this position" << std::endl;
+            return;
+        }
         Fileds[x2][y2] = Fileds[x1][y1];
-        Fileds[x1][y1] = 0;
+        Fileds[x1][y1] = '0';
     }
 
     bool Board::check_legality(){
         return true;
     }
 
+    void Board::possible_shifts(int x, int y){
+        if(Fileds[x][y] == '0' || Fileds[x][y] == ' '){
+            std::cout << "No checker at this position" << std::endl;
+            return;
+        }
+        if(Fileds[x][y-2]=='0'){
+            std::cout << "Possible move to " << x<< " " << y-2  << std::endl;
+        }
+        if(Fileds[x][y+2]=='0'){
+            std::cout << "Possible move to " << x << " " << y+2 << std::endl;
+        }
+        if(Fileds[x-1][y-1]=='0'){
+            std::cout << "Possible move to " << x-1 << " " << y-1 << std::endl;
+        }
+        if(Fileds[x+1][y+1]=='0'){
+            std::cout << "Possible move to " << x+1 << " " << y+1 << std::endl;
+        }
+        if(Fileds[x-1][y+1]=='0'){
+            std::cout << "Possible move to " << x-1 << " " << y+1 << std::endl;
+        }
+        if(Fileds[x+1][y-1]=='0'){
+            std::cout << "Possible move to " << x+1 << " " << y-1 << std::endl;
+        }
+
+    }
+
+    void Board::possible_jumps(int x, int y){
+        
+        
+        if(Fileds[x-1][y-1]!='0' && Fileds[x-2][y-2]=='0'){
+            std::cout << "Possible jump to " << x-2 << " " << y-2 << std::endl;
+            next_jump(x-2, y-2, x, y);
+        }
+        if(Fileds[x+1][y+1]!='0' && Fileds[x+2][y+2]=='0'){
+            std::cout << "Possible jump to " << x+2 << " " << y+2 << std::endl;
+            next_jump(x+2, y+2, x, y);
+        }
+        if(Fileds[x-1][y+1]!='0' && Fileds[x-2][y+2]=='0'){
+            std::cout << "Possible jump to " << x-2 << " " << y+2 << std::endl;
+            next_jump(x-2, y+2, x, y);
+        }
+        if(Fileds[x+1][y-1]!='0' && Fileds[x+2][y-2]=='0'){
+            std::cout << "Possible jump to " << x+2 << " " << y-2 << std::endl;
+            next_jump(x+2, y-2, x, y);
+        }
+    }
+
+    //x and y are the point to calculate the jump from, a and b are the point from which previous jump was made
+    //This function has to guarrentee that you can't jump back to the same place
+    void Board::next_jump(int x, int y, int a, int b){
+        if(Fileds[x-1][y-1]!='0' && Fileds[x-2][y-2]=='0' && (x-2 != a || y-2 != b)){
+            std::cout << "Possible jump to " << x-2 << " " << y-2 << std::endl;
+            next_jump(x-2, y-2, x, y);
+        }
+        if(Fileds[x+1][y+1]!='0' && Fileds[x+2][y+2]=='0' && (x+2 != a || y+2 != b)){
+            std::cout << "Possible jump to " << x+2 << " " << y+2 << std::endl;
+            next_jump(x+2, y+2, x, y);
+        }
+        if(Fileds[x-1][y+1]!='0' && Fileds[x-2][y+2]=='0' && (x-2 != a || y+2 != b)){
+            std::cout << "Possible jump to " << x-2 << " " << y+2 << std::endl;
+            next_jump(x-2, y+2, x, y);
+        }
+        if(Fileds[x+1][y-1]!='0' && Fileds[x+2][y-2]=='0' && (x+2 != a || y-2 != b)){
+            std::cout << "Possible jump to " << x+2 << " " << y-2 << std::endl;
+            next_jump(x+2, y-2, x, y);
+        }
+    }
+
     void Board::showBoard(){
 
-        std::cout<<"     ";
-
-        for(int i= 0; i<=26; i++){
-            std::cout<<Alphabet[i]<<"  ";
-        }
 
         std::cout<<std::endl;
 
