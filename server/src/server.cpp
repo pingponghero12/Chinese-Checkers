@@ -11,6 +11,11 @@ Server::~Server() {
 bool Server::init_server() {
     struct sockaddr_in address;
 
+    if (port <= 0 || port > 65535) {
+        std::cerr << "Invalid port number. Port must be between 1 and 65535" << std::endl;
+        return false;
+    }
+
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == 0) {
         perror("Socket failed");
@@ -29,7 +34,7 @@ bool Server::init_server() {
     // Accept connections on every interface
     address.sin_addr.s_addr = INADDR_ANY;
     // Portal number to network format
-    address.sin_port = htons(PORT);
+    address.sin_port = htons(port);
 
     // Binding of socket with address and port
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
@@ -45,7 +50,7 @@ bool Server::init_server() {
         return false;;
     }
 
-    std::cout << "Server listening on port " << PORT << "\n";
+    std::cout << "Server listening on port " << port << "\n";
     return true;
 }
 

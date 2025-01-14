@@ -8,6 +8,7 @@ ServerController::ServerController(Server* server_ptr) : server(server_ptr) {
     initialize_commands();
 }
 
+/*
 std::vector<int> parse_message_to_vi(const std::string& message) {
     std::istringstream iss(message);
     std::vector<int> args;
@@ -15,6 +16,31 @@ std::vector<int> parse_message_to_vi(const std::string& message) {
     while (iss >> value) {
         args.push_back(value);
     }
+    return args;
+}
+*/
+
+std::vector<int> ServerController::parse_message_to_vi(const std::string& message) {
+    std::vector<int> args;
+    std::istringstream iss(message);
+    std::string token;
+
+    // Split into tokens and try to parse each one
+    while (iss >> token) {
+        try {
+            size_t pos = 0;
+            int value = std::stoi(token, &pos);
+            
+            // Check if the entire token was consumed (no trailing chars)
+            if (pos == token.length()) {
+                args.push_back(value);
+            }
+        } catch (const std::exception& e) {
+            // Invalid number format - ignore and continue
+            continue;
+        }
+    }
+
     return args;
 }
 

@@ -5,6 +5,7 @@ pkgs.mkShell {
     cmake
     gcc
     gnumake
+    gtest
 
     python3
     python3Packages.pyqt5
