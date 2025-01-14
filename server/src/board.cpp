@@ -257,11 +257,6 @@
 
     void Board::showBoard(){
 
-        std::cout<<"     ";
-
-        for(int i= 0; i<=26; i++){
-            std::cout<<Alphabet[i]<<"  ";
-        }
 
         std::cout<<std::endl;
 
