@@ -7,16 +7,32 @@
 #include <netinet/in.h>
 #include <arpa/inet.h> 
 #include <sys/socket.h>
+#include <memory>
 
 #include "client.hpp"
 
 #define BUFFER_SIZE 1024
 
 Client::Client(const std::string& ip, int port)
-    : server_ip(ip), port(port), sock(0), connected(false) {}
+    : server_ip(ip), port(port), sock(0), connected(false), board(nullptr) {}
 
 Client::~Client() {
     disconnect();
+}
+
+std::vector<int> parse_move(const std::string& message) {
+    std::vector<int> coords;
+    std::istringstream iss(message);
+    std::string command;
+    int value;
+
+    iss >> command;
+    
+    while (iss >> value) {
+        coords.push_back(value);
+    }
+
+    return coords;
 }
 
 void Client::receive_messages() {
@@ -32,11 +48,55 @@ void Client::receive_messages() {
             break;
         }
 
+        std::string message = std::string(buffer);
+        if (message.substr(0, 6) == "joined") {
+            create_board(message[6] - '0');
+        } 
+        else if (message.substr(0, 6) == "exited") {
+            exit_board();
+        }
+        else if (message.substr(0, 4) == "move") {
+            std::vector<int> mv = parse_move(message);
+            board->move(mv[0], mv[1], mv[2], mv[3]);
+        }
+
         if (message_callback) {
             message_callback(std::string(buffer));
         }
     }
 }
+
+std::vector<std::pair<int, int>> Client::possible_moves(int x, int y) {
+    return board->possible_moves(x, y);
+}
+
+std::vector<std::vector<int>> Client::board_state() {
+    std::vector<std::vector<char>> char_board = board->getFields();
+    std::vector<std::vector<int>> result(17, std::vector<int>(25));
+
+    for (size_t i = 0; i < char_board.size(); i++) {
+        for (size_t j = 0; j < char_board[i].size(); j++) {
+            char c = char_board[i][j];
+            if (c == '0' || c == ' ') {
+                result[i][j] = -1;
+            } else {
+                // Convert '1' to 0, '2' to 1, etc.
+                result[i][j] = (c - '1');
+            }
+        }
+    }
+
+    return result;
+}
+
+void Client::create_board(int players) {
+    board = std::unique_ptr<Standard_Board>(new Standard_Board(players));
+}
+
+void Client::exit_board() {
+    board = nullptr;
+}
+
 
 std::string Client::transform_message(const std::string& input) {
     std::istringstream iss(input);

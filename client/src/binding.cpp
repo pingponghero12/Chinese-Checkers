@@ -14,5 +14,7 @@ PYBIND11_MODULE(client_module, m) {
         .def("send_message", &Client::send_message)
         .def("disconnect", &Client::disconnect)
         .def("start_receiving", &Client::start_receiving)
+        .def("board_state", &Client::board_state)
+        .def("possible_moves", &Client::possible_moves)
         .def("set_message_callback", &Client::set_message_callback);
 }

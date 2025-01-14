@@ -5,6 +5,10 @@
 #include <thread>
 #include <functional>
 #include <vector>
+#include <memory>
+
+#include "board.hpp"
+#include "standard_board.hpp"
 
 class Client {
 public:
@@ -24,6 +28,8 @@ public:
 private:
     void receive_messages();
     std::string transform_message(const std::string& message);
+    void create_board(int players);
+    void exit_board();
 
     std::string server_ip;
     int port;
@@ -31,6 +37,7 @@ private:
     std::thread receiver_thread;
     bool connected;
     MessageCallback message_callback;
+    std::unique_ptr<Standard_Board> board;
 };
 
 #endif // CLIENT_H
