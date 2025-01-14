@@ -142,6 +142,10 @@ void Board::showBoard() {
     }
 }
 
+std::vector<std::vector<char>> Board::getFields() const {
+    return Fileds;
+}
+
 char Board::get_Field(int x, int y) const {
     if (x < 0 || x > 4 * (size - 1) || y < 0 || y > 6 * (size - 1)) {
         return ' ';
