@@ -1,6 +1,10 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QHBoxLayout
 from chinese_checkers_board import ChineseCheckersBoard
 
+"""
+GameWindow class is a QWidget that represents the main window of the game.
+It contains the ChineseCheckersBoard widget and allows the player to exit the game.
+"""
 class GameWindow(QWidget):
     def __init__(self, lobby_name, switch_to_lobbies, my_id, send_move):
         super().__init__()

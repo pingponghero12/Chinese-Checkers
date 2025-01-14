@@ -2,6 +2,10 @@ import math
 from PyQt5.QtGui import QPolygon, QColor
 from PyQt5.QtCore import QPoint
 
+"""
+Hexagon class represents a hexagon shape on the game board.
+It contains information about the hexagon's position, size, color, and player.
+"""
 class Hexagon:
     def __init__(self, center_x, center_y, size, player, row, col):
         self.center_x = center_x
