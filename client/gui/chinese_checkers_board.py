@@ -1,11 +1,11 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import QPoint, Qt
 from hexagon import Hexagon
 import math
 
 class ChineseCheckersBoard(QWidget):
-    def __init__(self):
+    def __init__(self, my_id):
         super().__init__()
         self.setMinimumSize(600, 600)  # Set a minimum size for the board
         self.hex_size = 15
@@ -13,7 +13,10 @@ class ChineseCheckersBoard(QWidget):
         self.hex_table = {}  # Dictionary to store hexagons in table
         self.hovered_hexagon = None  # Currently hovered hexagon
         self.create_hexagons()
-        self.setMouseTracking(True)  # Enable mouse tracking for hover events
+        self.setMouseTracking(True)
+        self.choosen = None
+        self.current_player = 0
+        self.my_id = my_id
 
     def create_hexagons(self):
         """
@@ -22,6 +25,10 @@ class ChineseCheckersBoard(QWidget):
         """
         self.hexagons.clear()
         self.hex_table.clear()
+
+        state = [[-1] * 25 for _ in range(17)]
+        state[8][12] = 0
+        state[8][14] = 0
 
         center_x = self.width() // 2
         center_y = self.height() // 2
@@ -44,27 +51,11 @@ class ChineseCheckersBoard(QWidget):
 
             for col in range(start_col, end_col, 2):
                 x = center_x + 1.5 * self.hex_size * (col - 12)
-                y = center_y + 2.5 * self.hex_size * (row - 8) * math.sqrt(3) / 2
-                hexagon = Hexagon(x, y, self.hex_size)
+                y = center_y + 3 * self.hex_size * (row - 8) * math.sqrt(3) / 2
+                hexagon = Hexagon(x, y, self.hex_size, state[row][col], row, col)
                 self.hexagons.append(hexagon)
 
                 self.hex_table[(row, col)] = hexagon
-
-        '''
-        center_x = self.width() // 2
-        center_y = self.height() // 2
-
-        for row in range(-5, 6):
-            for col in range(-5, 6):
-                if abs(row + col) > 5:
-                    continue
-                x = center_x + 1.5 * self.hex_size * (3/2 * col)
-                y = center_y + 1.5 * self.hex_size * (math.sqrt(3) * (row + col / 2))
-                hexagon = Hexagon(x, y, self.hex_size)
-                self.hexagons.append(hexagon)
-                # Store hexagons in a dictionary with row and col as keys
-                self.hex_table[(row, col)] = hexagon
-        '''
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -81,11 +72,26 @@ class ChineseCheckersBoard(QWidget):
 
         :param event: The mouse event.
         """
-        click_point = event.pos()
-        for hexagon in self.hexagons:
-            if hexagon.polygon.containsPoint(click_point, Qt.OddEvenFill):
-                self.handle_hex_click(hexagon)
-                break  # Assuming one hexagon is clicked at a time
+        if self.my_id == self.current_player:
+            click_point = event.pos()
+            for hexagon in self.hexagons:
+                if hexagon.polygon.containsPoint(click_point, Qt.OddEvenFill):
+                    self.handle_hex_click(hexagon)
+                    break  # Assuming one hexagon is clicked at a time
+        else :
+            QMessageBox.warning(self, "Wrong turn", "Pls wait your turn")
+
+    def unhighlight(self):
+        highlighted = [] # test
+        for i in highlighted:
+            hex_table[i].toggle_color("normal")
+            hex_table[i].highlight = False
+
+    def highlight(self):
+        highlighted = [] # test
+        for i in highlighted:
+            hex_table[i].toggle_color("highlight")
+            hex_table[i].highlight = True
 
     def handle_hex_click(self, hexagon):
         """
@@ -93,8 +99,16 @@ class ChineseCheckersBoard(QWidget):
 
         :param hexagon: The Hexagon object that was clicked.
         """
-        # Toggle the hexagon's color
-        hexagon.toggle_color()
+        if (self.current_player != hexagon.player):
+            QMessageBox.warning(self, "Wrong selection", "Pls choose your color")
+            return
+
+        if (self.choosen != None):
+            self.hex_table[self.choosen].toggle_color("normal")
+            self.unhighlight()
+
+        self.choosen = (hexagon.row, hexagon.col)
+        self.hex_table[self.choosen].toggle_color("choosen")
 
         # Call the dupa() function
         self.dupa()

@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 #include <functional>
+#include <vector>
 
 class Client {
 public:
@@ -17,6 +18,8 @@ public:
     void send_message(const std::string& message);
     void disconnect();
     void set_message_callback(MessageCallback callback);
+    std::vector<std::pair<int, int>> possible_moves(int x, int y);
+    std::vector<std::vector<int>> board_state();
 
 private:
     void receive_messages();

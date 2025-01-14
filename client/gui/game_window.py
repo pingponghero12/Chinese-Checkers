@@ -2,10 +2,11 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QHBoxLayo
 from chinese_checkers_board import ChineseCheckersBoard
 
 class GameWindow(QWidget):
-    def __init__(self, lobby_name, switch_to_lobbies):
+    def __init__(self, lobby_name, switch_to_lobbies, my_id):
         super().__init__()
         self.lobby_name = lobby_name
         self.switch_to_lobbies = switch_to_lobbies
+        self.my_id = my_id
         self.init_ui()
 
     def init_ui(self):
@@ -24,7 +25,7 @@ class GameWindow(QWidget):
 
         layout.addLayout(header)
 
-        self.board = ChineseCheckersBoard()
+        self.board = ChineseCheckersBoard(self.my_id)
         layout.addWidget(self.board)
 
         self.setLayout(layout)

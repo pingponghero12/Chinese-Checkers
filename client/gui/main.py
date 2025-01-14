@@ -5,6 +5,7 @@ from main_menu import MainMenu
 from lobbies_list import LobbiesList
 from game_window import GameWindow
 from about_dialog import AboutDialog
+import time
 
 import client_module
 
@@ -17,6 +18,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Chinese Checkers")
         self.setGeometry(100, 100, 800, 600)
         self.init_ui()
+        self.my_id = None
 
         self.communicator = Communicator()
         self.communicator.message.connect(self.handle_server_message)
@@ -63,9 +65,10 @@ class MainWindow(QWidget):
     def join_game(self, lobby_name):
         self.client.send_message(f"join {lobby_name}")
 
+        time.sleep(0.1)
         if self.game_window:
             self.stack.removeWidget(self.game_window)
-        self.game_window = GameWindow(lobby_name, self.leave_game)
+        self.game_window = GameWindow(lobby_name, self.leave_game, self.my_id)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
@@ -75,13 +78,15 @@ class MainWindow(QWidget):
 
         if self.game_window:
             self.stack.removeWidget(self.game_window)
-        self.game_window = GameWindow("my game", self.leave_game)
+
+        self.game_window = GameWindow("my game", self.leave_game, 0)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
     def leave_game(self):
         self.client.send_message("exit")
         self.show_lobbies()
+        self.my_id = None
 
     def on_message_received(self, message):
         self.communicator.message.emit(message)
@@ -96,10 +101,12 @@ class MainWindow(QWidget):
             for lobby in lobbies:
                 self.lobbies_list.list_widget.addItem(lobby)
 
+        if message.startswith("joined:"):
+            self.my_id = message.split(":", 1)[1]
+
     def closeEvent(self, event):
             self.client.disconnect()
             event.accept()
-
 
 def main():
     app = QApplication(sys.argv)
