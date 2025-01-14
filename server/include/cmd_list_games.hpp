@@ -25,9 +25,9 @@ public:
     void execute(const std::vector<int>& args, int client_id) {
         std::vector<Game> games = controller.game_list();
 
-        std::string out = "";
+        std::string out = "lobbies:";
         for (size_t i=0; i < games.size(); i++) {
-            out = out + std::to_string(games[i].get_id()) + " - " + std::to_string(games[i].get_players()) + "/" + std::to_string(games[i].get_game_type()) + "\n";
+            out = out + std::to_string(games[i].get_id()) + " - " + std::to_string(games[i].get_players()) + "/" + std::to_string(games[i].get_game_type()) + ",";
         }
         controller.send_call(out, client_id);
     }

@@ -3,13 +3,27 @@ from PyQt5.QtGui import QPolygon, QColor
 from PyQt5.QtCore import QPoint
 
 class Hexagon:
-    def __init__(self, center_x, center_y, size):
+    def __init__(self, center_x, center_y, size, player, row, col):
         self.center_x = center_x
         self.center_y = center_y
+        self.row = row
+        self.col = col
         self.size = size
-        self.color = QColor(200, 200, 200)
+        self.color = None
         self.previous_color = self.color
         self.polygon = self.create_polygon()
+        self.highlight = False;
+        self.player = player;
+        self.color_mapping = {
+            -1: QColor(240, 240, 240), # White
+            0: QColor(255, 0, 0),      # Red
+            1: QColor(0, 255, 0),      # Green
+            2: QColor(0, 0, 255),      # Blue
+            3: QColor(255, 255, 0),    # Yellow
+            4: QColor(255, 0, 255),    # Magenta
+            5: QColor(0, 255, 255)     # Cyan
+        }
+        self.toggle_color("normal")
 
     def create_polygon(self):
         hexagon = QPolygon()
@@ -22,10 +36,12 @@ class Hexagon:
             hexagon.append(point)
         return hexagon
 
-    def toggle_color(self):
-        if self.color == QColor(200, 200, 200):
-            self.color = QColor(255, 0, 0)
-        elif self.color == QColor(255, 0, 0):
-            self.color = QColor(0, 0, 255)
-        else:
-            self.color = QColor(200, 200, 200)
+    def toggle_color(self, color):
+        print(f"toggle_color {self.color} player {self.player}")
+        if color == "normal":
+            self.color = self.color_mapping[self.player]
+        if color == "choosen":
+            self.color = QColor(0, 0, 0)
+        if color == "highlight":
+            self.color = QColor(128, 128, 128)
+

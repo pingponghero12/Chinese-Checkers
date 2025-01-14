@@ -55,9 +55,8 @@ void Game::end() {
     }
 }
 
-void Game::move(int client_id, int x, int y) {
-    auto it = std::find(players.begin(), players.end(), client_id);
-    std::string out = "Player " + std::to_string(*it) + " moved to: " + std::to_string(x) + std::to_string(y) + "\n";
+void Game::move(int client_id, int x1, int y1, int x2, int y2) {
+    std::string out =  "move," + std::to_string(x1) + "," + std::to_string(y1) + "," + std::to_string(x2) + "," + std::to_string(y2);
     for (const auto& client_id : players) {
         controller->send_call(out, client_id);
     }

@@ -8,6 +8,7 @@ pkgs.mkShell {
 
     python3
     python3Packages.pyqt5
+    python312Packages.pybind11
     qt5.qtbase
     qt5.wrapQtAppsHook
     xorg.libX11
