@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['center_5fx_0',['center_x',['../classhexagon_1_1Hexagon.html#ad6cebfa1b68000f997c208ec25036ab6',1,'hexagon::Hexagon']]],
+  ['center_5fy_1',['center_y',['../classhexagon_1_1Hexagon.html#a9df23fc50397e11b74582f6977bd08f4',1,'hexagon::Hexagon']]],
+  ['chinese_5fcheckers_5fboard_2',['chinese_checkers_board',['../namespacechinese__checkers__board.html',1,'']]],
+  ['chinese_5fcheckers_5fboard_2epy_3',['chinese_checkers_board.py',['../chinese__checkers__board_8py.html',1,'']]],
+  ['chinesecheckersboard_4',['ChineseCheckersBoard',['../classchinese__checkers__board_1_1ChineseCheckersBoard.html',1,'chinese_checkers_board']]],
+  ['choosen_5',['choosen',['../classchinese__checkers__board_1_1ChineseCheckersBoard.html#a35178c750fa3c3da47d4a2f0831cffd6',1,'chinese_checkers_board::ChineseCheckersBoard']]],
+  ['client_6',['client',['../classmain_1_1MainWindow.html#a502dcb5de11bdb61e62e8c5b50b836a9',1,'main::MainWindow']]],
+  ['closeevent_7',['closeEvent',['../classmain_1_1MainWindow.html#adb86564a9e631eef6c0e3116c05cfff2',1,'main::MainWindow']]],
+  ['col_8',['col',['../classhexagon_1_1Hexagon.html#a67776fb6920a58296f3a48cd70ecf553',1,'hexagon::Hexagon']]],
+  ['color_9',['color',['../classhexagon_1_1Hexagon.html#a62a37a3c16c7937412a771be12c04361',1,'hexagon::Hexagon']]],
+  ['color_5fmapping_10',['color_mapping',['../classhexagon_1_1Hexagon.html#aa443f40ac6a413d1164e7f4662ad47e9',1,'hexagon::Hexagon']]],
+  ['communicator_11',['Communicator',['../classmain_1_1Communicator.html',1,'main']]],
+  ['communicator_12',['communicator',['../classmain_1_1MainWindow.html#a41d93f38bcc44f08a77f7831c4f977fa',1,'main::MainWindow']]],
+  ['create_5fgame_13',['create_game',['../classlobbies__list_1_1LobbiesList.html#a21dac861f93cbe0e2cd1c7638215d5da',1,'lobbies_list.LobbiesList.create_game'],['../classmain_1_1MainWindow.html#afb34210b87cf5c3aa071865ebda5727d',1,'main.MainWindow.create_game()']]],
+  ['create_5fhexagons_14',['create_hexagons',['../classchinese__checkers__board_1_1ChineseCheckersBoard.html#a61ed33d9652f9add5c3b60a97f011545',1,'chinese_checkers_board::ChineseCheckersBoard']]],
+  ['create_5fpolygon_15',['create_polygon',['../classhexagon_1_1Hexagon.html#a33260d62e6ef9ddb45017ac73684fd38',1,'hexagon::Hexagon']]],
+  ['current_5fplayer_16',['current_player',['../classchinese__checkers__board_1_1ChineseCheckersBoard.html#ad1987a146d886cd2c4db1d08a0523292',1,'chinese_checkers_board::ChineseCheckersBoard']]]
+];

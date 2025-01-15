@@ -1,0 +1,60 @@
+\doxysection{binding.\+cpp File Reference}
+\hypertarget{binding_8cpp}{}\label{binding_8cpp}\index{binding.cpp@{binding.cpp}}
+{\ttfamily \#include $<$pybind11/pybind11.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/stl.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/complex.\+h$>$}\newline
+{\ttfamily \#include $<$pybind11/functional.\+h$>$}\newline
+{\ttfamily \#include "{}client.\+hpp"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{binding_8cpp_acc6bc8cbad27e49ddd1fb48e2cfa42de}{PYBIND11\+\_\+\+MODULE}} (client\+\_\+module, m)
+\begin{DoxyCompactList}\small\item\em Creates the Python module and defines the bindings. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{binding_8cpp_acc6bc8cbad27e49ddd1fb48e2cfa42de}\label{binding_8cpp_acc6bc8cbad27e49ddd1fb48e2cfa42de} 
+\index{binding.cpp@{binding.cpp}!PYBIND11\_MODULE@{PYBIND11\_MODULE}}
+\index{PYBIND11\_MODULE@{PYBIND11\_MODULE}!binding.cpp@{binding.cpp}}
+\doxysubsubsection{\texorpdfstring{PYBIND11\_MODULE()}{PYBIND11\_MODULE()}}
+{\footnotesize\ttfamily PYBIND11\+\_\+\+MODULE (\begin{DoxyParamCaption}\item[{client\+\_\+module}]{,  }\item[{m}]{ }\end{DoxyParamCaption})}
+
+
+
+Creates the Python module and defines the bindings. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & The pybind11 module object to which the bindings will be added\\
+\hline
+\end{DoxyParams}
+This function creates a Python module named \textquotesingle{}client\+\_\+module\textquotesingle{} and exposes the Client class and its methods to Python. The following functionality is exposed\+:
+\begin{DoxyItemize}
+\item Constructor taking server address and port
+\item Connection management (connect, disconnect)
+\item Message handling (send\+\_\+message, set\+\_\+message\+\_\+callback)
+\item Background receiving functionality (start\+\_\+receiving) 
+\end{DoxyItemize}Exposes the Client constructor 
+\begin{DoxyParams}{Parameters}
+{\em address} & Server address as string \\
+\hline
+{\em port} & Server port as integer\\
+\hline
+\end{DoxyParams}
+Exposes the connect\+\_\+to\+\_\+server method \begin{DoxyReturn}{Returns}
+Boolean indicating connection success
+\end{DoxyReturn}
+Exposes the send\+\_\+message method 
+\begin{DoxyParams}{Parameters}
+{\em message} & String message to send to server\\
+\hline
+\end{DoxyParams}
+Exposes the disconnect method
+
+Exposes the start\+\_\+receiving method for background message processing
+
+Exposes the set\+\_\+message\+\_\+callback method 
+\begin{DoxyParams}{Parameters}
+{\em callback} & Python callable to handle received messages\\
+\hline
+\end{DoxyParams}
