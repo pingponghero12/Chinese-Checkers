@@ -1,0 +1,266 @@
+\doxysection{chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board Class Reference}
+\hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard}{}\label{classchinese__checkers__board_1_1ChineseCheckersBoard}\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+Inheritance diagram for chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classchinese__checkers__board_1_1ChineseCheckersBoard}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_aa3b369fa23aae75aca57b966a420d8d6}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a20fc259b769efc83556695f041a9156a}{my\+\_\+id}}, \mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ac76642e5fbae73e3b7a8051f5e81c00b}{send\+\_\+move}})
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a61ed33d9652f9add5c3b60a97f011545}{create\+\_\+hexagons}} (self)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a6c5bdc9ba37e048ffb020d30bab71074}{paint\+Event}} (self, event)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_aa2a3db1182d8f54443567de0459b1424}{mouse\+Press\+Event}} (self, event)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a32ab641d3c2af5c17e12915d45eceda1}{unhighlight}} (self)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a09afcd095cf4dd80f7f42c92c13154ff}{highlight}} (self)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ade928f45415ae2b3c3127807c99185be}{handle\+\_\+hex\+\_\+click}} (self, hexagon)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a76266ae1f0f1408c27afab0a187ad106}{move}} (self, mv)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a451a782764f2f2b9f8dfaa812a2c2070}{dupa}} (self)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a1452b409d47ac5d436c76cb79f763526}{hover\+Move\+Event}} (self, event)
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_af399306581fa1e6f085debf10087c5a7}{resize\+Event}} (self, event)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a001ad80afbf90c0a50d979433091f56c}{hex\+\_\+size}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ac2210f7ddbf678432e4129008e1fba17}{hexagons}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ae6929165d23cb421e6018dd962dd34da}{hex\+\_\+table}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a8bf5aaf1a005ea6c4ac9e964d59be5c2}{hovered\+\_\+hexagon}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ac76642e5fbae73e3b7a8051f5e81c00b}{send\+\_\+move}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a35178c750fa3c3da47d4a2f0831cffd6}{choosen}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_ad1987a146d886cd2c4db1d08a0523292}{current\+\_\+player}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_a20fc259b769efc83556695f041a9156a}{my\+\_\+id}}
+\item 
+\mbox{\hyperlink{classchinese__checkers__board_1_1ChineseCheckersBoard_afdd1d2d8814cbc0aba50d4a7c4665cbb}{highlighted}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}@brief Represents the game board for Chinese Checkers.
+
+This class inherits from QWidget and manages the graphical representation
+of the Chinese Checkers board, including hexagons for each position on the
+board and handling user interactions.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_aa3b369fa23aae75aca57b966a420d8d6}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_aa3b369fa23aae75aca57b966a420d8d6} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{my\+\_\+id,  }\item[{}]{send\+\_\+move }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Initializes the Chinese Checkers board.
+
+@param my_id The player's ID to identify the current player.
+@param send_move The function to call for sending moves to the game.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a61ed33d9652f9add5c3b60a97f011545}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a61ed33d9652f9add5c3b60a97f011545} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!create\_hexagons@{create\_hexagons}}
+\index{create\_hexagons@{create\_hexagons}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{create\_hexagons()}{create\_hexagons()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+create\+\_\+hexagons (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Initializes the hexagons on the board.
+
+This method creates hexagons and organizes them in a table-like structure
+(nested lists) based on rows and columns. It also sets the initial state
+of the game board.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a451a782764f2f2b9f8dfaa812a2c2070}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a451a782764f2f2b9f8dfaa812a2c2070} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!dupa@{dupa}}
+\index{dupa@{dupa}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{dupa()}{dupa()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+dupa (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Placeholder for handling hexagon clicks with debug output.
+
+This method currently just prints a message indicating a hexagon
+has been clicked.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_ade928f45415ae2b3c3127807c99185be}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_ade928f45415ae2b3c3127807c99185be} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!handle\_hex\_click@{handle\_hex\_click}}
+\index{handle\_hex\_click@{handle\_hex\_click}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{handle\_hex\_click()}{handle\_hex\_click()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+handle\+\_\+hex\+\_\+click (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{hexagon }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Handles actions when a hexagon is clicked.
+
+This method performs actions based on which hexagon was clicked,
+including selecting a hexagon for movement and sending the move if valid.
+
+@param hexagon The hexagon that was clicked.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a09afcd095cf4dd80f7f42c92c13154ff}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a09afcd095cf4dd80f7f42c92c13154ff} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!highlight@{highlight}}
+\index{highlight@{highlight}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{highlight()}{highlight()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+highlight (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Highlights all hexagons specified in the highlighted list.
+
+This method changes the color of hexagons in the highlighted list
+to indicate they can be selected for movement.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a1452b409d47ac5d436c76cb79f763526}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a1452b409d47ac5d436c76cb79f763526} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!hoverMoveEvent@{hoverMoveEvent}}
+\index{hoverMoveEvent@{hoverMoveEvent}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{hoverMoveEvent()}{hoverMoveEvent()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+hover\+Move\+Event (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{event }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Handles hover movement to highlight hexagons under the cursor.
+
+This method changes the color of hexagons when the mouse hovers over them,
+providing visual feedback to the user.
+
+@param event The hover event.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_aa2a3db1182d8f54443567de0459b1424}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_aa2a3db1182d8f54443567de0459b1424} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!mousePressEvent@{mousePressEvent}}
+\index{mousePressEvent@{mousePressEvent}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{mousePressEvent()}{mousePressEvent()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+mouse\+Press\+Event (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{event }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Handles mouse press events to detect clicks on hexagons.
+
+This method checks if a hexagon was clicked and performs actions 
+based on the current player and selected hexagon.
+
+@param event The mouse event.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a76266ae1f0f1408c27afab0a187ad106}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a76266ae1f0f1408c27afab0a187ad106} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!move@{move}}
+\index{move@{move}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+move (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{mv }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Handles the movement of a piece on the board.
+
+This method updates the board state by moving a piece from one hexagon
+to another based on the provided move parameters.
+
+@param mv A list containing the coordinates of the move: 
+          [from_row, from_col, to_row, to_col].
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a6c5bdc9ba37e048ffb020d30bab71074}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a6c5bdc9ba37e048ffb020d30bab71074} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!paintEvent@{paintEvent}}
+\index{paintEvent@{paintEvent}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{paintEvent()}{paintEvent()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+paint\+Event (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{event }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Paints the hexagons on the board.
+
+This method is called whenever the widget needs to be redrawn, and it
+redraws all hexagons using the QPainter.
+
+@param event The paint event.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_af399306581fa1e6f085debf10087c5a7}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_af399306581fa1e6f085debf10087c5a7} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!resizeEvent@{resizeEvent}}
+\index{resizeEvent@{resizeEvent}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{resizeEvent()}{resizeEvent()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+resize\+Event (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{event }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Handles the resize event of the widget.
+
+This method is called when the widget is resized and adjusts the
+positions of hexagons accordingly.
+
+@param event The resize event.
+\end{DoxyVerb}
+ \Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a32ab641d3c2af5c17e12915d45eceda1}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a32ab641d3c2af5c17e12915d45eceda1} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!unhighlight@{unhighlight}}
+\index{unhighlight@{unhighlight}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{unhighlight()}{unhighlight()}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+unhighlight (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}@brief Unhighlights all currently highlighted hexagons.
+
+This method resets the color of highlighted hexagons and clears the 
+highlighted list.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a35178c750fa3c3da47d4a2f0831cffd6}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a35178c750fa3c3da47d4a2f0831cffd6} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!choosen@{choosen}}
+\index{choosen@{choosen}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{choosen}{choosen}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+choosen}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_ad1987a146d886cd2c4db1d08a0523292}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_ad1987a146d886cd2c4db1d08a0523292} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!current\_player@{current\_player}}
+\index{current\_player@{current\_player}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{current\_player}{current\_player}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+current\+\_\+player}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a001ad80afbf90c0a50d979433091f56c}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a001ad80afbf90c0a50d979433091f56c} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!hex\_size@{hex\_size}}
+\index{hex\_size@{hex\_size}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{hex\_size}{hex\_size}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+hex\+\_\+size}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_ae6929165d23cb421e6018dd962dd34da}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_ae6929165d23cb421e6018dd962dd34da} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!hex\_table@{hex\_table}}
+\index{hex\_table@{hex\_table}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{hex\_table}{hex\_table}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+hex\+\_\+table}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_ac2210f7ddbf678432e4129008e1fba17}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_ac2210f7ddbf678432e4129008e1fba17} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!hexagons@{hexagons}}
+\index{hexagons@{hexagons}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{hexagons}{hexagons}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+hexagons}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_afdd1d2d8814cbc0aba50d4a7c4665cbb}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_afdd1d2d8814cbc0aba50d4a7c4665cbb} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!highlighted@{highlighted}}
+\index{highlighted@{highlighted}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{highlighted}{highlighted}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+highlighted}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a8bf5aaf1a005ea6c4ac9e964d59be5c2}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a8bf5aaf1a005ea6c4ac9e964d59be5c2} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!hovered\_hexagon@{hovered\_hexagon}}
+\index{hovered\_hexagon@{hovered\_hexagon}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{hovered\_hexagon}{hovered\_hexagon}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+hovered\+\_\+hexagon}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_a20fc259b769efc83556695f041a9156a}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_a20fc259b769efc83556695f041a9156a} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!my\_id@{my\_id}}
+\index{my\_id@{my\_id}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{my\_id}{my\_id}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+my\+\_\+id}
+
+\Hypertarget{classchinese__checkers__board_1_1ChineseCheckersBoard_ac76642e5fbae73e3b7a8051f5e81c00b}\label{classchinese__checkers__board_1_1ChineseCheckersBoard_ac76642e5fbae73e3b7a8051f5e81c00b} 
+\index{chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}!send\_move@{send\_move}}
+\index{send\_move@{send\_move}!chinese\_checkers\_board.ChineseCheckersBoard@{chinese\_checkers\_board.ChineseCheckersBoard}}
+\doxysubsubsection{\texorpdfstring{send\_move}{send\_move}}
+{\footnotesize\ttfamily chinese\+\_\+checkers\+\_\+board.\+Chinese\+Checkers\+Board.\+send\+\_\+move}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{chinese__checkers__board_8py}{chinese\+\_\+checkers\+\_\+board.\+py}}\end{DoxyCompactItemize}
