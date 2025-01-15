@@ -14,6 +14,12 @@
 #include "server_controller.hpp"
 #include "game.hpp"
 
+
+/**
+ * @brief Command to move a checker
+ * The command moves a checker from one position to another
+ * If arguments are not provided, the function prints an error message
+ */
 class CmdMove : public AbstractCommand {
 public:
     CmdMove(ServerController& controller) : controller(controller) {}

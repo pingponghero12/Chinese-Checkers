@@ -15,6 +15,7 @@
 
     int Game::get_players() {
         return players.size();
+
     }
 
     void Game::add_player(int client_id) {
@@ -57,6 +58,7 @@
 
     void Game::move(int client_id, int x1, int y1, int x2, int y2) {
         std::string out =  "move," + std::to_string(x1) + "," + std::to_string(y1) + "," + std::to_string(x2) + "," + std::to_string(y2);
+
     for (const auto& client_id : players) {
         controller->send_call(out, client_id);
     }

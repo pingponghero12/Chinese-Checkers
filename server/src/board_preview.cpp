@@ -1,8 +1,13 @@
 #include <iostream>
 #include "standard_board.hpp"
 
-int chuj(){
-
+/**
+ * Quick funtion to test the board
+ * Initialize the board with a size of 5
+ * Setup the board with pieces for 6 players
+ * Show the board
+ */
+int main_main(){
     Standard_Board board(5);
 
     board.setup_board(6);

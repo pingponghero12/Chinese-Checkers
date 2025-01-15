@@ -15,6 +15,13 @@
 #include <memory>
 #include <sstream>
 
+/**
+ * @brief Game class
+ * The class represents a game on the server
+ * The game is initialized with a game type and a host
+ * Players can be added and removed from the game
+ * The game logic is executed in a separate thread
+ */
 class ServerController;
 class Game {
 public:

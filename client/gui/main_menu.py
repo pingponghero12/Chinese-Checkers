@@ -1,6 +1,10 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 
+"""
+MainMenu class is a QWidget that represents the main menu of the game.
+It allows the player to show available lobbies and display information about the application.
+"""
 class MainMenu(QWidget):
     def __init__(self, switch_to_lobbies, show_about):
         super().__init__()

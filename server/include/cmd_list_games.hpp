@@ -18,6 +18,14 @@
 #include "abstract_command.hpp"
 #include "server_controller.hpp"
 
+
+/**
+ * @brief Command to list games
+ * The command lists all games on the server
+ * The command sends a message to the client with the list of games
+ * Each game is represented by an id and the number of players in the game
+ */
+
 class CmdListGames : public AbstractCommand {
 public:
     CmdListGames(ServerController& controller) : controller(controller) {}

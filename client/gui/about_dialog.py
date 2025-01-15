@@ -1,5 +1,9 @@
 from PyQt5.QtWidgets import QMessageBox
 
+"""
+AboutDialog class is a simple dialog window that displays information about the application.
+"""
+
 class AboutDialog(QMessageBox):
     def __init__(self):
         super().__init__()

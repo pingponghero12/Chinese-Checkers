@@ -11,6 +11,13 @@
 #include "game.hpp"
 #include "abstract_command.hpp"
 
+/**
+ * @brief ServerController class
+ * The class is responsible for handling the server logic
+ * The class is initialized with a pointer to the server
+ * The class is responsible for parsing and sending messages
+ * The class is responsible for handling the game creation and deletion
+ */
 class Server;
 
 class ServerController {

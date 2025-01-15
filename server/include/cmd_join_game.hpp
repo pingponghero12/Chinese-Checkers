@@ -19,6 +19,12 @@
 #include "server_controller.hpp"
 #include "game.hpp"
 
+/**
+ * @brief Command to join a game
+ * The command adds a player to a game
+ * The player is added to the game with a given id
+ * 
+ */
 class CmdJoinGame : public AbstractCommand {
 public:
     CmdJoinGame(ServerController& controller) : controller(controller) {}

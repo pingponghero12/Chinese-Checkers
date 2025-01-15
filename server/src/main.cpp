@@ -6,6 +6,11 @@
 #include "server.hpp"
 
 #define PORT 8080
+/**
+ * @brief Construct a new Server:: Server object
+ * Creates a new server with a given port
+ * All the games are played on a one server
+ */
 
 int main() {
     Server server(PORT);
