@@ -5,3 +5,5 @@ server/old/
 *__pycache__
 *.cache
 docs/
+html/
+latex/

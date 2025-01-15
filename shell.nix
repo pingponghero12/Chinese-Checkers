@@ -6,6 +6,7 @@ pkgs.mkShell {
     gcc
     gnumake
     gtest
+    doxygen
 
     python3
     python3Packages.pyqt5
