@@ -5,12 +5,19 @@
 #include <thread>
 #include <functional>
 #include <vector>
+#include <memory>
+
+#include "board.hpp"
+#include "standard_board.hpp"
+
+
 /**
  * @brief The Client class is responsible for connecting to the server, sending and receiving messages.
  * It also provides a method to get the possible moves for a given position and the current board state.
  * The class uses a callback to notify the user when a message is received.
  * The class is not responsible for the game logic, it only provides the necessary information to the user.
  */
+
 class Client {
 public:
     using MessageCallback = std::function<void(const std::string&)>;
@@ -29,6 +36,8 @@ public:
 private:
     void receive_messages();
     std::string transform_message(const std::string& message);
+    void create_board(int players);
+    void exit_board();
 
     std::string server_ip;
     int port;
@@ -36,6 +45,7 @@ private:
     std::thread receiver_thread;
     bool connected;
     MessageCallback message_callback;
+    std::unique_ptr<Standard_Board> board;
 };
 
 #endif // CLIENT_H

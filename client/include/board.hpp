@@ -4,13 +4,6 @@
 #include <iostream>
 #include <vector>
 
-/**
- * @brief Board class
- * Board is an abstract class that represents the board of the game.
- * It is initialized with a size and a 2D vector of characters.
- * It is possible to get size and fields of the board by using dedicated functions.
- */
-
 class Board {
 private:
     int size;
@@ -34,12 +27,11 @@ public:
     void fill_hexagon();
     virtual std::vector<std::pair<int,int>> possible_shifts(int x, int y) = 0;
     virtual std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b) = 0;
-    virtual std::vector<std::vector<char>> getFields() const;
-
+    virtual std::vector<std::pair<int, int>> possible_moves(int x, int y) = 0;
     char get_Field(int x, int y) const;
+    std::vector<std::vector<char>> getFields() const;
     void set_Field(int x, int y, char value);
     int get_size() const;
-    std::vector<std::vector<char>> getFields() const;
 
     
 };

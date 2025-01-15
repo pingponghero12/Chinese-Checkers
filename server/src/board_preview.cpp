@@ -7,9 +7,7 @@
  * Setup the board with pieces for 6 players
  * Show the board
  */
-
-int main(){
-
+int main_main(){
     Standard_Board board(5);
 
     board.setup_board(6);

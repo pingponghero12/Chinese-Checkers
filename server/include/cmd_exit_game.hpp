@@ -50,7 +50,7 @@ public:
             }
         }
 
-        controller.send_call("Exited game\n", client_id);
+        controller.send_call("exited", client_id);
     }
 
 private:

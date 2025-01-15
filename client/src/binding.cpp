@@ -1,4 +1,3 @@
-// binding.cpp
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/complex.h>
@@ -48,10 +47,8 @@ PYBIND11_MODULE(client_module, m) {
          * @brief Exposes the start_receiving method for background message processing
          */
         .def("start_receiving", &Client::start_receiving)
-        
-        /**
-         * @brief Exposes the set_message_callback method
-         * @param callback Python callable to handle received messages
-         */
+        .def("board_state", &Client::board_state)
+        .def("possible_moves", &Client::possible_moves)
+
         .def("set_message_callback", &Client::set_message_callback);
 }

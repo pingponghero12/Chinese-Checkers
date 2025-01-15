@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget, QMessageBox, QInputDialog
 from PyQt5.QtGui import QPainter, QColor, QBrush
 from PyQt5.QtCore import QPoint, Qt
 from hexagon import Hexagon
@@ -12,14 +12,14 @@ class ChineseCheckersBoard(QWidget):
     of the Chinese Checkers board, including hexagons for each position on the
     board and handling user interactions.
     """
-
-    def __init__(self, my_id, send_move):
+    def __init__(self, my_id, send_move, possible_moves, board_state, pg):
         """
         @brief Initializes the Chinese Checkers board.
 
         @param my_id The player's ID to identify the current player.
         @param send_move The function to call for sending moves to the game.
         """
+
         super().__init__()
         self.setMinimumSize(600, 600)  # Set a minimum size for the board
         self.hex_size = 15
@@ -27,12 +27,15 @@ class ChineseCheckersBoard(QWidget):
         self.hex_table = {}  # Dictionary to store hexagons in table
         self.hovered_hexagon = None  # Currently hovered hexagon
         self.send_move = send_move
+        self.possible_moves = possible_moves
+        self.board_state = board_state
         self.create_hexagons()
         self.setMouseTracking(True)
         self.choosen = None
         self.current_player = 0
+        self.pg = pg
         self.my_id = my_id
-        self.highlighted = [(0, 12)]  # Highlight the starting position
+        self.highlighted = []
 
     def create_hexagons(self):
         """
@@ -45,9 +48,7 @@ class ChineseCheckersBoard(QWidget):
         self.hexagons.clear()
         self.hex_table.clear()
 
-        state = [[-1] * 25 for _ in range(17)]  # Initialize the state of the board
-        state[8][12] = 0  # Set some initial positions
-        state[8][14] = 0
+        state = self.board_state()
 
         center_x = self.width() // 2
         center_y = self.height() // 2
@@ -104,7 +105,7 @@ class ChineseCheckersBoard(QWidget):
 
         @param event The mouse event.
         """
-        if self.my_id == self.current_player:
+        if self.my_id() == self.current_player:
             click_point = event.pos()
             for hexagon in self.hexagons:
                 if hexagon.polygon.containsPoint(click_point, Qt.OddEvenFill):
@@ -120,7 +121,7 @@ class ChineseCheckersBoard(QWidget):
         This method resets the color of highlighted hexagons and clears the 
         highlighted list.
         """
-        self.highlighted = []  # Clear highlighted positions
+
         for i in self.highlighted:
             self.hex_table[i].toggle_color("normal")
             self.hex_table[i].highlight = False
@@ -131,12 +132,17 @@ class ChineseCheckersBoard(QWidget):
 
         This method changes the color of hexagons in the highlighted list
         to indicate they can be selected for movement.
-        """
+        """        
+        self.highlighted = self.possible_moves(self.choosen[0], self.choosen[1])
+
         for i in self.highlighted:
             self.hex_table[i].toggle_color("highlight")
             self.hex_table[i].highlight = True
 
     def handle_hex_click(self, hexagon):
+
+        if hexagon.player == self.my_id():
+            if (self.choosen != None):
         """
         @brief Handles actions when a hexagon is clicked.
 
@@ -145,8 +151,6 @@ class ChineseCheckersBoard(QWidget):
 
         @param hexagon The hexagon that was clicked.
         """
-        if hexagon.player == self.my_id:  # Check if the hexagon belongs to the current player
-            if self.choosen is not None:
                 self.hex_table[self.choosen].toggle_color("normal")
                 self.unhighlight()
 
@@ -169,7 +173,8 @@ class ChineseCheckersBoard(QWidget):
                     self.send_move(mv)
 
     def move(self, mv):
-        """
+
+     """
         @brief Handles the movement of a piece on the board.
 
         This method updates the board state by moving a piece from one hexagon
@@ -178,18 +183,16 @@ class ChineseCheckersBoard(QWidget):
         @param mv A list containing the coordinates of the move: 
                   [from_row, from_col, to_row, to_col].
         """
-        print(mv)
-
-        self.hex_table[(mv[0], mv[1])].player = -1  # Remove player from start position
+        self.hex_table[(mv[0], mv[1])].player = -1
         self.hex_table[(mv[0], mv[1])].toggle_color("normal")
 
-        self.hex_table[(mv[2], mv[3])].player = self.current_player  # Assign player to end position
-        print(f"move play {self.hex_table[(mv[2], mv[3])].player} {self.current_player}")
+        self.hex_table[(mv[2], mv[3])].player = self.current_player
         self.hex_table[(mv[2], mv[3])].toggle_color("normal")
 
-        self.current_player = (self.current_player + 1) % 6  # Update to the next player
+        self.current_player = (self.current_player + 1) % self.pg()
 
-        self.update()  # Refresh the display
+        self.update()
+        print(f"Updated player {self.current_player} you {self.my_id()}")
 
     def dupa(self):
         """

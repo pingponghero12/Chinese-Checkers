@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <memory>
+
 #include "client.hpp"
 
 /// Maximum size for the receive buffer
@@ -18,13 +20,36 @@
  * @param port The port number to connect to
  */
 Client::Client(const std::string& ip, int port)
-    : server_ip(ip), port(port), sock(0), connected(false) {}
+    : server_ip(ip), port(port), sock(0), connected(false), board(nullptr) {}
 
 /**
  * @brief Destructor ensures proper cleanup by disconnecting if necessary
  */
 Client::~Client() {
     disconnect();
+}
+std::vector<int> parse_move(const std::string& message) {
+    std::vector<int> coords;
+    std::string token;
+    std::istringstream iss(message);
+    
+    // Get the command (first token)
+    std::getline(iss, token, ',');
+    
+    // Get the coordinates
+    while (std::getline(iss, token, ',')) {
+        try {
+            coords.push_back(std::stoi(token));
+        } catch (const std::invalid_argument&) {
+            // Handle invalid number format
+            continue;
+        } catch (const std::out_of_range&) {
+            // Handle number out of range
+            continue;
+        }
+    }
+
+    return coords;
 }
 
 /**
@@ -45,11 +70,60 @@ void Client::receive_messages() {
             close(sock);
             break;
         }
+
+        std::cout << "chuj" << std::endl;
+        std::string message = std::string(buffer);
+        if (message.substr(0, 6) == "joined") {
+            std::cout << message << std::endl;
+            create_board(message[6] - '0');
+        } 
+        else if (message.substr(0, 6) == "exited") {
+            exit_board();
+        }
+        else if (message.substr(0, 4) == "move") {
+            std::vector<int> mv = parse_move(message);
+
+            board->move(mv[0], mv[1], mv[2], mv[3]);
+        }
         if (message_callback) {
             message_callback(std::string(buffer));
         }
     }
 }
+
+std::vector<std::pair<int, int>> Client::possible_moves(int x, int y) {
+    return board->possible_moves(x, y);
+}
+
+std::vector<std::vector<int>> Client::board_state() {
+    std::vector<std::vector<char>> char_board = board->getFields();
+    std::vector<std::vector<int>> result(17, std::vector<int>(25));
+
+    for (size_t i = 0; i < char_board.size(); i++) {
+        for (size_t j = 0; j < char_board[i].size(); j++) {
+            char c = char_board[i][j];
+            if (c == '0' || c == ' ') {
+                result[i][j] = -1;
+            } else {
+                // Convert '1' to 0, '2' to 1, etc.
+                result[i][j] = (c - '1');
+            }
+        }
+    }
+
+    return result;
+}
+
+void Client::create_board(int players) {
+    board = std::unique_ptr<Standard_Board>(new Standard_Board(5));
+    board->setup_board(players);
+}
+
+void Client::exit_board() {
+    board = nullptr;
+}
+
+
 
 /**
  * @brief Transforms client messages into server protocol format
