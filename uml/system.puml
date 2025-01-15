@@ -11,127 +11,129 @@ package "Server System" {
         + ~Server()
         + bool init_server()
         + void start_server()
-	+ void send_message(const std::string& message, const int& client_id)
+        + void send_message(const std::string& message, const int& client_id)
         + void broadcast_message(const std::string& message)
         + void handle_client(int client_socket, int client_number, struct sockaddr_in client_addr)
         --
         - int port
         - int server_fd
-    	- std::unordered_map<int, int> client_sockets;
+        - std::unordered_map<int, int> client_sockets;
         - std::mutex client_mutex
-	- ServerController* controller;
+        - ServerController* controller;
         --
         - void server_input_thread()
         - void loop_new_clients()
     }
 
     class ServerController {
-    	// Calls info send to clients and responds to client messages.
-	--
-	+ void parse_call(const std::string& message, int client_number);
-	+ void send_call(const std::string& message, int client_number);
-
-	+ void add_game(Game game)
-	+ void delete_game(int game_id)
-	+ std::vector<Game> game_list()
-
-	+ void update_player_status(int client_number, int status)
-	+ void add_player_to_game(int client_number, int id)
+        + void parse_call(const std::string& message, int client_number)
+        + void send_call(const std::string& message, int client_number)
+        + void add_game(Game game)
+        + void delete_game(int game_id)
+        + std::vector<Game> game_list()
+        + void update_player_status(int client_number, int status)
+        + void add_player_to_game(int client_number, int id)
         --
-	- Server* server;
-	- std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
-	- std::unordered_map<int, Game> current_games
-	- std::unordered_map<int, int> player_status : // Client_id to current game or -1 for not in game
-	--
-	- void initialize_commands();
+        - Server* server;
+        - std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
+        - std::unordered_map<int, Game> current_games;
+        - std::unordered_map<int, int> player_status; // Client_id to current game or -1 for not in game
+        --
+        - void initialize_commands();
     }
 
     class AbstractCommand {
-        // Abstract Command for Commands design pattern
-        --
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdAddGame {
-        // Add game command
-        --
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdListGames {
-	// List games to viever
-        --
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdJoinGame {
-	// Join game
-	--
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdMove {
-	// Move in game
-	--
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class CmdExitGame {
-	// Exit game
-	--
-    	+ void execute(const std::vector<int>& args, int client_number)
+        + void execute(const std::vector<int>& args, int client_number)
     }
 
     class Game {
-        // Game logic and move functions.
-	--
-	+ Game()
-	+ ~Game()
-
-	+ int get_id()
-	+ int get_game_type() // Max number of players in game
-	+ int get_players() // Current players in lobby
-
-	+ void add_player(int client_number);
-	+ void remove_player(int client_number);
-
-	+ void move(int client_id)
-	+ void end()
+        + Game()
+        + ~Game()
+        + int get_id()
+        + int get_game_type()
+        + int get_players()
+        + void add_player(int client_number)
+        + void remove_player(int client_number)
+        + void move(int client_id)
+        + void end()
         --
         - std::vector<int> players;
-	- int id;
-	- int game_type;
-	- Board board
+        - int id;
+        - int game_type;
+        - Board board;
     }
 
-    class Board {
-        +Board(int size)
-
-        + void setup_board(int num_players);
-        + void move_checker(int x1, int y1, int x2, int y2); //moves the ckecker
-        + bool check_legality(); //checks if a move is legal
-        + void showBoard();
-        + void fill_empty_space();
-        + void fill_top_triangle(char x);
-        + void fill_bottom_triangle(char x);
-        + void fill_top_left(char x);
-        + void fill_top_right(char x);
-        + void fill_bot_left(char x);
-        + void fill_bot_right(char x);
-        + void fill_hexagon();
-
+    abstract class Board {
+        + Board(int board_size)
+        + virtual ~Board()
+        + void fill_empty_space()
+        + void fill_top_triangle(char x)
+        + void fill_bottom_triangle(char x)
+        + void fill_top_left(char x)
+        + void fill_top_right(char x)
+        + void fill_bot_left(char x)
+        + void fill_bot_right(char x)
+        + void setup_board(int num_players)
+        + void move(int x1, int y1, int x2, int y2)
+        + virtual bool check_legality() = 0
+        + void showBoard()
+        + void fill_hexagon()
+        + virtual std::vector<std::pair<int,int>> possible_shifts(int x, int y) = 0
+        + virtual std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b) = 0
+        + virtual std::vector<std::pair<int, int>> possible_moves(int x, int y) = 0
+        + char get_Field(int x, int y) const
+        + void set_Field(int x, int y, char value)
+        + int get_size() const
+        + std::vector<std::vector<char>> getFields() const
         --
-        - int size;
-        - std::vector<std::vector<char>> Fileds;
-        
+        - int size
+        - std::vector<std::vector<char>> Fileds
     }
+
+    class Standard_Board {
+        + Standard_Board(int board_size)
+        + bool check_legality() override
+        + std::vector<std::pair<int,int>> possible_shifts(int x, int y)
+        + std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b)
+        + std::vector<std::pair<int, int>> possible_moves(int x, int y)
+    }
+
+    class Fast_Board {
+        + Fast_Board(int board_size)
+        + bool check_legality() override
+        + std::vector<std::pair<int,int>> possible_shifts(int x, int y)
+        + std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b)
+        + std::vector<std::pair<int, int>> possible_moves(int x, int y)
+    }
+
+    Board <|-down- Standard_Board
+    Board <|-down- Fast_Board
+    Game --> Board : contains
 }
 
 main --> Server : creates and uses
 Server --> ServerController : calls functions
-ServerController --> Server : calls functions
 ServerController --> Game : manages multiple games
-Game --> Board : contains a board for each game
 
 CmdAddGame -right-> ServerController
 CmdListGames -right-> ServerController
@@ -145,11 +147,5 @@ CmdListGames -|> AbstractCommand
 CmdJoinGame -|> AbstractCommand
 CmdMove -|> AbstractCommand
 CmdExitGame -|> AbstractCommand
-
-ServerController -right-> CmdAddGame
-ServerController -right-> CmdListGames
-ServerController -right-> CmdJoinGame
-ServerController -right-> CmdMove
-ServerController -right-> CmdExitGame
 
 @enduml
