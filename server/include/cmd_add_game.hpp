@@ -33,7 +33,7 @@ public:
         controller.add_game(client_id, game);
         controller.update_player_status(client_id, client_id);
 
-        controller.send_call("Added game\n", client_id);
+        controller.send_call("joined"+std::to_string(args[0])+"1", client_id);
     }
 
 private:

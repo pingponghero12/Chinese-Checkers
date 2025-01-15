@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox, QInputDialog
 from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
@@ -17,8 +17,9 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Chinese Checkers")
         self.setGeometry(100, 100, 800, 600)
-        self.init_ui()
         self.my_id = None
+        self.pg = None
+        self.init_ui()
 
         self.communicator = Communicator()
         self.communicator.message.connect(self.handle_server_message)
@@ -68,7 +69,7 @@ class MainWindow(QWidget):
         time.sleep(0.1)
         if self.game_window:
             self.stack.removeWidget(self.game_window)
-        self.game_window = GameWindow(lobby_name, self.leave_game, self.my_id, self.send_move)
+        self.game_window = GameWindow(lobby_name, self.leave_game, self.get_my_id, self.get_pg, self.send_move, self.client.possible_moves, self.client.board_state)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
@@ -77,12 +78,20 @@ class MainWindow(QWidget):
 
     def create_game(self):
         print("create_game")
-        self.client.send_message("create 6")
+
+        number, ok = QInputDialog.getInt(self, 
+                                        "Number Input", 
+                                        "Enter a number:",
+                                        min=2,
+                                        max=6)
+
+        self.client.send_message(f"create {number}")
+        time.sleep(0.1)
 
         if self.game_window:
             self.stack.removeWidget(self.game_window)
 
-        self.game_window = GameWindow("my game", self.leave_game, 0, self.send_move)
+        self.game_window = GameWindow("my game", self.leave_game, self.get_my_id, self.get_pg, self.send_move, self.client.possible_moves, self.client.board_state)
         self.stack.addWidget(self.game_window)
         self.stack.setCurrentWidget(self.game_window)
 
@@ -90,6 +99,12 @@ class MainWindow(QWidget):
         self.client.send_message("exit")
         self.show_lobbies()
         self.my_id = None
+
+    def get_pg(self):
+        return self.pg
+
+    def get_my_id(self):
+        return self.my_id
 
     def on_message_received(self, message):
         self.communicator.message.emit(message)
@@ -104,8 +119,10 @@ class MainWindow(QWidget):
             for lobby in lobbies:
                 self.lobbies_list.list_widget.addItem(lobby)
 
-        if message.startswith("joined:"):
-            self.my_id = message.split(":", 1)[1]
+        if message.startswith("joined"):
+            self.my_id = int(message[7]) - 1
+            self.pg = int(message[6])
+            print(f"PAGE KURWA {self.pg}")
 
         if message.startswith("move,"):
             mv = message.split(",", 1)[1]

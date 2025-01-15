@@ -1,7 +1,7 @@
 #include <iostream>
 #include "standard_board.hpp"
 
-int main(){
+int chuj(){
 
     Standard_Board board(5);
 

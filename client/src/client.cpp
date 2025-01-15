@@ -19,17 +19,25 @@ Client::Client(const std::string& ip, int port)
 Client::~Client() {
     disconnect();
 }
-
 std::vector<int> parse_move(const std::string& message) {
     std::vector<int> coords;
+    std::string token;
     std::istringstream iss(message);
-    std::string command;
-    int value;
-
-    iss >> command;
     
-    while (iss >> value) {
-        coords.push_back(value);
+    // Get the command (first token)
+    std::getline(iss, token, ',');
+    
+    // Get the coordinates
+    while (std::getline(iss, token, ',')) {
+        try {
+            coords.push_back(std::stoi(token));
+        } catch (const std::invalid_argument&) {
+            // Handle invalid number format
+            continue;
+        } catch (const std::out_of_range&) {
+            // Handle number out of range
+            continue;
+        }
     }
 
     return coords;
@@ -48,8 +56,10 @@ void Client::receive_messages() {
             break;
         }
 
+        std::cout << "chuj" << std::endl;
         std::string message = std::string(buffer);
         if (message.substr(0, 6) == "joined") {
+            std::cout << message << std::endl;
             create_board(message[6] - '0');
         } 
         else if (message.substr(0, 6) == "exited") {
@@ -57,6 +67,7 @@ void Client::receive_messages() {
         }
         else if (message.substr(0, 4) == "move") {
             std::vector<int> mv = parse_move(message);
+
             board->move(mv[0], mv[1], mv[2], mv[3]);
         }
 
@@ -90,7 +101,8 @@ std::vector<std::vector<int>> Client::board_state() {
 }
 
 void Client::create_board(int players) {
-    board = std::unique_ptr<Standard_Board>(new Standard_Board(players));
+    board = std::unique_ptr<Standard_Board>(new Standard_Board(5));
+    board->setup_board(players);
 }
 
 void Client::exit_board() {
