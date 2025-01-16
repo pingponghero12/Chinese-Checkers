@@ -19,6 +19,12 @@
 #include "server_controller.hpp"
 #include "game.hpp"
 
+/**
+ * @brief Command to exit a game
+ * The command removes a player from a game
+ * If player is not in a game, the function prints an error message
+ * After sucessfully exiting the game, the function prints a confirmation message
+ */
 class CmdExitGame : public AbstractCommand {
 public:
     CmdExitGame(ServerController& controller) : controller(controller) {}
@@ -44,7 +50,7 @@ public:
             }
         }
 
-        controller.send_call("Exited game\n", client_id);
+        controller.send_call("exited", client_id);
     }
 
 private:

@@ -15,6 +15,13 @@
 #include <memory>
 #include <sstream>
 
+/**
+ * @brief Game class
+ * The class represents a game on the server
+ * The game is initialized with a game type and a host
+ * Players can be added and removed from the game
+ * The game logic is executed in a separate thread
+ */
 class ServerController;
 class Game {
 public:
@@ -30,7 +37,7 @@ public:
     void remove_player(int client_id);
 
     void game_logic();
-    void move(int client_id, int x, int y);
+    void move(int client_id, int x1, int y1, int x2, int y2);
     void end();
 private:
     std::vector<int> players;

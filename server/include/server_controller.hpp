@@ -11,6 +11,13 @@
 #include "game.hpp"
 #include "abstract_command.hpp"
 
+/**
+ * @brief ServerController class
+ * The class is responsible for handling the server logic
+ * The class is initialized with a pointer to the server
+ * The class is responsible for parsing and sending messages
+ * The class is responsible for handling the game creation and deletion
+ */
 class Server;
 
 class ServerController {
@@ -37,8 +44,10 @@ private:
     std::unordered_map<int, std::unique_ptr<AbstractCommand>> command_registry_;
     std::unordered_map<int, int> player_status; // -1 if not in game, game_id otherwise
 
+
     void initialize_commands();
     bool is_in_game(int client_id) const;
+    std::vector<int> parse_message_to_vi(const std::string& message);
 };
 
 #endif // __SERVERCONTROLLER__
