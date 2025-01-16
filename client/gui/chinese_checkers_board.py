@@ -143,14 +143,6 @@ class ChineseCheckersBoard(QWidget):
 
         if hexagon.player == self.my_id():
             if (self.choosen != None):
-        """
-        @brief Handles actions when a hexagon is clicked.
-
-        This method performs actions based on which hexagon was clicked,
-        including selecting a hexagon for movement and sending the move if valid.
-
-        @param hexagon The hexagon that was clicked.
-        """
                 self.hex_table[self.choosen].toggle_color("normal")
                 self.unhighlight()
 
@@ -174,15 +166,6 @@ class ChineseCheckersBoard(QWidget):
 
     def move(self, mv):
 
-     """
-        @brief Handles the movement of a piece on the board.
-
-        This method updates the board state by moving a piece from one hexagon
-        to another based on the provided move parameters.
-
-        @param mv A list containing the coordinates of the move: 
-                  [from_row, from_col, to_row, to_col].
-        """
         self.hex_table[(mv[0], mv[1])].player = -1
         self.hex_table[(mv[0], mv[1])].toggle_color("normal")
 
