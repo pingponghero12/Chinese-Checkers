@@ -34,7 +34,7 @@ public:
     void fill_hexagon();
     virtual std::vector<std::pair<int,int>> possible_shifts(int x, int y) = 0;
     virtual std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b) = 0;
-    
+    virtual std::vector<std::vector<char>> getFields() const;
 
     char get_Field(int x, int y) const;
     void set_Field(int x, int y, char value);
