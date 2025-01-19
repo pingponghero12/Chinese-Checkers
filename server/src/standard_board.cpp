@@ -33,11 +33,11 @@ std::vector<std::pair<int,int>> Standard_Board::possible_shifts(int x, int y){
     if(get_Field(x - 1, y - 1)=='0'){
         shifts.push_back(std::make_pair(x-1, y-1));
     }
-    if(get_Field(x, y + 2)=='0'){
-        shifts.push_back(std::make_pair(x, y+2));
+    if(get_Field(x+ 2, y )=='0'){
+        shifts.push_back(std::make_pair(x+2, y));
     }
-    if(get_Field(x, y - 2)=='0'){
-        shifts.push_back(std::make_pair(x, y-2));
+    if(get_Field(x- 2, y )=='0'){
+        shifts.push_back(std::make_pair(x-2, y));
     }
     return shifts;
 }
@@ -59,8 +59,8 @@ std::vector<std::pair<int,int>> Standard_Board::possible_jumps(int x, int y, int
     if (get_Field(x+1, y+1) != '0') add_jump(x+2, y+2);
     if (get_Field(x-1, y+1) != '0') add_jump(x-2, y+2);
     if (get_Field(x+1, y-1) != '0') add_jump(x+2, y-2);
-    if (get_Field(x, y+2) != '0') add_jump(x, y+4);
-    if (get_Field(x, y-2) != '0') add_jump(x, y-4);
+    if (get_Field(x+2, y) != '0') add_jump(x+4, y);
+    if (get_Field(x-2, y) != '0') add_jump(x-4, y);
 
     return jumps;
 }
