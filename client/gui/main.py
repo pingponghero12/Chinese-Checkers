@@ -162,6 +162,19 @@ class MainWindow(QWidget):
         """
         self.communicator.message.emit(message)
 
+    def parse_message_to_vi(self, message: str) -> list[int]:
+        args = []
+        tokens = message.split()
+        
+        for token in tokens:
+            try:
+                value = int(token)
+                args.append(value)
+            except ValueError:
+                continue
+        
+        return args
+
     def handle_server_message(self, message):
         """!
         @brief Process server messages and update UI accordingly
@@ -176,8 +189,9 @@ class MainWindow(QWidget):
                 self.lobbies_list.list_widget.addItem(lobby)
 
         if message.startswith("joined"):
-            self.my_id = int(message[7]) - 1
-            self.pg = int(message[6])
+            args = self.parse_message_to_vi(message)
+            self.my_id = args[1] - 1
+            self.pg = args[0]
 
         if message.startswith("move,"):
             mv = message.split(",", 1)[1]

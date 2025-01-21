@@ -56,7 +56,7 @@ public:
             }
         }
 
-        controller.send_call("joined"+std::to_string(players)+std::to_string(id)+std::to_string(board), client_id);
+        controller.send_call("joined " + std::to_string(players) + " " + std::to_string(id) + " " + std::to_string(board), client_id);
     }
 
 private:

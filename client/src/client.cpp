@@ -22,7 +22,16 @@
  * @param port The port number to connect to
  */
 Client::Client(const std::string& ip, int port)
-    : server_ip(ip), port(port), sock(0), connected(false), board(nullptr) {}
+    : server_ip(ip), port(port), sock(0), connected(false), board(nullptr) {
+
+    transform_map = {
+        {"create", "1"},
+        {"list", "2"},
+        {"join", "3"},
+        {"move", "4"},
+        {"exit", "5"},
+    };
+}
 
 /**
  * @brief Destructor ensures proper cleanup by disconnecting if necessary
@@ -54,6 +63,30 @@ std::vector<int> parse_move(const std::string& message) {
     return coords;
 }
 
+std::vector<int> Client::parse_message_to_vi(const std::string& message) {
+    std::vector<int> args;
+    std::istringstream iss(message);
+    std::string token;
+
+    // Split into tokens and try to parse each one
+    while (iss >> token) {
+        try {
+            size_t pos = 0;
+            int value = std::stoi(token, &pos);
+            
+            // Check if the entire token was consumed (no trailing chars)
+            if (pos == token.length()) {
+                args.push_back(value);
+            }
+        } catch (const std::exception& e) {
+            // Invalid number format - ignore and continue
+            continue;
+        }
+    }
+
+    return args;
+}
+
 /**
  * @brief Message receiving thread function
  * @details Continuously receives messages from the server while connected.
@@ -76,7 +109,10 @@ void Client::receive_messages() {
         std::string message = std::string(buffer);
         if (message.substr(0, 6) == "joined") {
             std::cout << message << std::endl;
-            create_board(message[6] - '0', message[8]-'0');
+            std::vector<int> args = parse_message_to_vi(message);
+            std::cout << args[0] << args[1] << std::endl;
+            create_board(args[0], args[2]);
+            std::cout << message << std::endl;
         } 
         else if (message.substr(0, 6) == "exited") {
             exit_board();
@@ -143,26 +179,18 @@ void Client::exit_board() {
  *          - "move" -> "4"
  *          - "exit" -> "5"
  */
+
 std::string Client::transform_message(const std::string& input) {
     std::istringstream iss(input);
     std::ostringstream oss;
     std::string command;
     iss >> command;
-    if (command == "create") {
-        oss << "1";
-    } else if (command == "list") {
-        oss << "2";
-    } else if (command == "join") {
-        oss << "3";
-    } else if (command == "move") {
-        oss << "4";
-    } else if (command == "exit") {
-        oss << "5";
-    } else {
-        // If unrecognized leave as is
+    if (transform_map.count(command) > 0) {
+        oss << transform_map[command];
+    }
+    else {
         oss << command;
     }
-    // Add the rest of arguments
     std::string rest;
     std::getline(iss, rest);
     oss << rest;
