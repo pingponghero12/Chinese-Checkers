@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox, QInputDialog, QListWidget
 from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
@@ -112,16 +112,26 @@ class MainWindow(QWidget):
 
     def create_game(self):
         """!
-        @brief Create a new game lobby for 6 players
+        @brief Create a new game lobby
         """
 
         number, ok = QInputDialog.getInt(self, 
-                                        "Number Input", 
-                                        "Enter a number:",
+                                        "Number of players", 
+                                        "Enter a number of players:",
                                         min=2,
                                         max=6)
+        if number == 5:
+            QMessageBox.warning(self, "Wrong selection", "Please choose valid number of players {2, 3, 4, 6}.")
+            return
 
-        self.client.send_message(f"create {number}")
+        board_type, ok = QInputDialog.getInt(self, 
+                                        "Board selection",
+                                        "Board type\nStandard - 0\nFast - 1", 
+                                        min=0,
+                                        max=1)
+
+
+        self.client.send_message(f"create {number} {board_type}")
         time.sleep(0.1)
 
         if self.game_window:

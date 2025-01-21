@@ -23,4 +23,4 @@ set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 
 include_directories(include)
 
-pybind11_add_module(client_module src/binding.cpp src/client.cpp src/board.cpp src/standard_board.cpp)
+pybind11_add_module(client_module src/binding.cpp src/client.cpp src/board.cpp src/standard_board.cpp src/fast_board.cpp)

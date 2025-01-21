@@ -10,6 +10,8 @@
 #include <memory>
 
 #include "client.hpp"
+#include "fast_board.hpp"
+#include "standard_board.hpp"
 
 /// Maximum size for the receive buffer
 #define BUFFER_SIZE 1024
@@ -74,7 +76,7 @@ void Client::receive_messages() {
         std::string message = std::string(buffer);
         if (message.substr(0, 6) == "joined") {
             std::cout << message << std::endl;
-            create_board(message[6] - '0');
+            create_board(message[6] - '0', message[8]-'0');
         } 
         else if (message.substr(0, 6) == "exited") {
             exit_board();
@@ -113,8 +115,14 @@ std::vector<std::vector<int>> Client::board_state() {
     return result;
 }
 
-void Client::create_board(int players) {
-    board = std::unique_ptr<Standard_Board>(new Standard_Board(5));
+void Client::create_board(int players, int board_type) {
+    if (board_type == 0) {
+        board = std::unique_ptr<Board>(new Standard_Board(5));
+    }
+    if (board_type == 1) {
+        board = std::unique_ptr<Board>(new Fast_Board(5));
+    }
+
     board->setup_board(players);
 }
 
