@@ -140,14 +140,6 @@ class ChineseCheckersBoard(QWidget):
             self.hex_table[i].highlight = True
 
     def handle_hex_click(self, hexagon):
-        """
-        @brief Handles actions when a hexagon is clicked.
-
-        This method performs actions based on which hexagon was clicked,
-        including selecting a hexagon for movement and sending the move if valid.
-
-        @param hexagon The hexagon that was clicked.
-        """
 
         if hexagon.player == self.my_id():
             if (self.choosen != None):
@@ -172,6 +164,7 @@ class ChineseCheckersBoard(QWidget):
                     self.unhighlight()
                     self.send_move(mv)
 
+
     """
     @brief Handles the movement of a piece on the board.
 
@@ -182,6 +175,7 @@ class ChineseCheckersBoard(QWidget):
               [from_row, from_col, to_row, to_col].
     """
     def move(self, mv):
+
         self.hex_table[(mv[0], mv[1])].player = -1
         self.hex_table[(mv[0], mv[1])].toggle_color("normal")
 
