@@ -40,6 +40,7 @@ public:
 
         int players;
         int id;
+        int board;
         {
             std::lock_guard<std::mutex> lock(controller.games_mutex);
             auto it = controller.current_games.find(game_id);
@@ -47,6 +48,7 @@ public:
                 it->second.add_player(client_id);
                 players = it->second.get_game_type();
                 id = it->second.get_players();
+                board = it->second.get_board();
             } else {
                 std::cerr << "Error: Game not found" << std::endl;
                 controller.send_call("Error: Game not found\n", client_id);
@@ -54,7 +56,7 @@ public:
             }
         }
 
-        controller.send_call("joined"+std::to_string(players)+std::to_string(id), client_id);
+        controller.send_call("joined"+std::to_string(players)+std::to_string(id)+std::to_string(board), client_id);
     }
 
 private:

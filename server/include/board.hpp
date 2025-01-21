@@ -36,6 +36,7 @@ public:
     virtual std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b) = 0;
     
 
+    std::vector<std::vector<char>> getFields() const;
     char get_Field(int x, int y) const;
     void set_Field(int x, int y, char value);
     int get_size() const;
