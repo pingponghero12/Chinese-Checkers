@@ -41,7 +41,6 @@ class Hexagon:
         return hexagon
 
     def toggle_color(self, color):
-        print(f"toggle_color {self.color} player {self.player}")
         if color == "normal":
             self.color = self.color_mapping[self.player]
         if color == "choosen":

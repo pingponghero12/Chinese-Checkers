@@ -39,7 +39,6 @@ public:
     char get_Field(int x, int y) const;
     void set_Field(int x, int y, char value);
     int get_size() const;
-    std::vector<std::vector<char>> getFields() const;
 
     
 };

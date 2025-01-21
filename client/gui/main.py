@@ -114,7 +114,6 @@ class MainWindow(QWidget):
         """!
         @brief Create a new game lobby for 6 players
         """
-        print("create_game")
 
         number, ok = QInputDialog.getInt(self, 
                                         "Number Input", 
@@ -158,7 +157,6 @@ class MainWindow(QWidget):
         @brief Process server messages and update UI accordingly
         @param message The message to process
         """
-        QMessageBox.information(self, "connected", message);
         if message.startswith("lobbies:"):
             lobby_data = message.split(":", 1)[1]
             lobbies = lobby_data.split(",")
@@ -170,7 +168,6 @@ class MainWindow(QWidget):
         if message.startswith("joined"):
             self.my_id = int(message[7]) - 1
             self.pg = int(message[6])
-            print(f"PAGE KURWA {self.pg}")
 
         if message.startswith("move,"):
             mv = message.split(",", 1)[1]

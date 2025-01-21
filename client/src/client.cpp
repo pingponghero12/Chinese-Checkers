@@ -71,7 +71,6 @@ void Client::receive_messages() {
             break;
         }
 
-        std::cout << "chuj" << std::endl;
         std::string message = std::string(buffer);
         if (message.substr(0, 6) == "joined") {
             std::cout << message << std::endl;

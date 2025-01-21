@@ -76,7 +76,6 @@ void Board::fill_hexagon() {
 }
 
 void Board::setup_board(int num_players) {
-    std::cout << "obsralem gacie" << std::endl;
     fill_empty_space();
     fill_hexagon();
     
@@ -120,7 +119,6 @@ void Board::setup_board(int num_players) {
 }
 
 void Board::move(int x1, int y1, int x2, int y2) {
-    std::cout << "elo zelo" << std::endl;
     if (Fileds[x1][y1] == '0' || Fileds[x1][y1] == ' ') {
         std::cout << "No checker at this position" << std::endl;
         return;
@@ -131,7 +129,6 @@ void Board::move(int x1, int y1, int x2, int y2) {
     }
     Fileds[x2][y2] = Fileds[x1][y1];
     Fileds[x1][y1] = '0';
-    std::cout << "skibidibidididi" << std::endl;
 }
 
 void Board::showBoard() {
@@ -141,7 +138,6 @@ void Board::showBoard() {
         for (int j = 0; j <= (6 * (size - 1)); j++) {
             std::cout << Fileds[i][j] << " ";
         }
-        std::cout << std::endl;
     }
 }
 
