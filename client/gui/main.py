@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QStackedWidget, QVBoxLayout, QMessageBox, QInputDialog, QListWidget
 from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
@@ -112,17 +112,26 @@ class MainWindow(QWidget):
 
     def create_game(self):
         """!
-        @brief Create a new game lobby for 6 players
+        @brief Create a new game lobby
         """
-        print("create_game")
 
         number, ok = QInputDialog.getInt(self, 
-                                        "Number Input", 
-                                        "Enter a number:",
+                                        "Number of players", 
+                                        "Enter a number of players:",
                                         min=2,
                                         max=6)
+        if number == 5:
+            QMessageBox.warning(self, "Wrong selection", "Please choose valid number of players {2, 3, 4, 6}.")
+            return
 
-        self.client.send_message(f"create {number}")
+        board_type, ok = QInputDialog.getInt(self, 
+                                        "Board selection",
+                                        "Board type\nStandard - 0\nFast - 1", 
+                                        min=0,
+                                        max=1)
+
+
+        self.client.send_message(f"create {number} {board_type}")
         time.sleep(0.1)
 
         if self.game_window:
@@ -153,12 +162,24 @@ class MainWindow(QWidget):
         """
         self.communicator.message.emit(message)
 
+    def parse_message_to_vi(self, message: str) -> list[int]:
+        args = []
+        tokens = message.split()
+        
+        for token in tokens:
+            try:
+                value = int(token)
+                args.append(value)
+            except ValueError:
+                continue
+        
+        return args
+
     def handle_server_message(self, message):
         """!
         @brief Process server messages and update UI accordingly
         @param message The message to process
         """
-        QMessageBox.information(self, "connected", message);
         if message.startswith("lobbies:"):
             lobby_data = message.split(":", 1)[1]
             lobbies = lobby_data.split(",")
@@ -168,9 +189,9 @@ class MainWindow(QWidget):
                 self.lobbies_list.list_widget.addItem(lobby)
 
         if message.startswith("joined"):
-            self.my_id = int(message[7]) - 1
-            self.pg = int(message[6])
-            print(f"PAGE KURWA {self.pg}")
+            args = self.parse_message_to_vi(message)
+            self.my_id = args[1] - 1
+            self.pg = args[0]
 
         if message.startswith("move,"):
             mv = message.split(",", 1)[1]

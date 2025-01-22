@@ -31,16 +31,16 @@ public:
     CmdAddGame(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_id) {
-        if (args.size() != 1) {
-            std::cerr << "Error: must set number of players" << std::endl;
+        if (args.size() != 2) {
+            std::cerr << "Error: must set number of players and game type" << std::endl;
             return;
         }
 
-        Game game(args[0], client_id, &controller);
+        Game game(args[0], args[1], client_id, &controller);
         controller.add_game(client_id, game);
         controller.update_player_status(client_id, client_id);
 
-        controller.send_call("joined"+std::to_string(args[0])+"1", client_id);
+        controller.send_call("joined "+std::to_string(args[0])+ " " + "1" + " " + std::to_string(args[1]), client_id);
     }
 
 private:

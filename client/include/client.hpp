@@ -6,9 +6,9 @@
 #include <functional>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include "board.hpp"
-#include "standard_board.hpp"
 
 
 /**
@@ -36,7 +36,8 @@ public:
 private:
     void receive_messages();
     std::string transform_message(const std::string& message);
-    void create_board(int players);
+    std::vector<int> parse_message_to_vi(const std::string& message);
+    void create_board(int players, int board_type);
     void exit_board();
 
     std::string server_ip;
@@ -45,7 +46,8 @@ private:
     std::thread receiver_thread;
     bool connected;
     MessageCallback message_callback;
-    std::unique_ptr<Standard_Board> board;
+    std::unique_ptr<Board> board;
+    std::unordered_map<std::string, std::string> transform_map;
 };
 
 #endif // CLIENT_H

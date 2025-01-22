@@ -59,6 +59,8 @@ std::vector<std::pair<int,int>> Standard_Board::possible_jumps(int x, int y, int
     if (get_Field(x+1, y+1) != '0') add_jump(x+2, y+2);
     if (get_Field(x-1, y+1) != '0') add_jump(x-2, y+2);
     if (get_Field(x+1, y-1) != '0') add_jump(x+2, y-2);
+    if (get_Field(x+2,y) != '0') add_jump(x+4, y);
+    if (get_Field(x-2, y) != '0') add_jump(x-4, y);
 
     return jumps;
 }

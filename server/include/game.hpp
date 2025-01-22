@@ -26,12 +26,13 @@ class ServerController;
 class Game {
 public:
     Game() {}
-    Game(int game_type, int client_id, ServerController* controller_ptr);
+    Game(int game_type, int board, int client_id, ServerController* controller_ptr);
     ~Game() = default;
 
     int get_id();
     int get_game_type();
     int get_players();
+    int get_board();
 
     void add_player(int client_id);
     void remove_player(int client_id);
@@ -43,6 +44,7 @@ private:
     std::vector<int> players;
     int id;
     int game_type;
+    int board_type;
     ServerController* controller;
 };
 
