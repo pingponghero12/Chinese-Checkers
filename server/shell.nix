@@ -16,6 +16,9 @@ in pkgs.mkShell {
     gnumake
     libmysqlconnectorcpp
     gtest
+
+    docker
+    docker-compose
   ];
 
   shellHook = ''
