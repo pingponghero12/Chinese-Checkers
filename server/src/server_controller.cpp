@@ -3,6 +3,7 @@
 
 #include "server_controller.hpp"
 #include "server.hpp"
+#include "secrets.hpp"
 
 /**
  * @brief Construct a new Server Controller:: Server Controller object
@@ -14,6 +15,9 @@
  */
 ServerController::ServerController(Server* server_ptr) : server(server_ptr) {
     initialize_commands();
+
+    // Definitions in secretes.hpp
+    dbconn = std::unique_ptr<DbConnector>(new DbConnector(IP, USERNAME, PASSWORD));
 }
 
 /**

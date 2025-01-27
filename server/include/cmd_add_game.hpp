@@ -2,18 +2,12 @@
 #define __CMDADDGAME__
 
 #include <iostream>
-#include <thread>
 #include <vector>
 #include <string>
 #include <cstring>
-#include <mutex>
-#include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <unordered_map>
-#include <memory>
-#include <sstream>
 
 #include "abstract_command.hpp"
 #include "server_controller.hpp"
@@ -36,7 +30,9 @@ public:
             return;
         }
 
-        Game game(args[0], args[1], client_id, &controller);
+        int db_id = controller.dbconn->insert_game(args[0], args[1]);
+
+        Game game(args[0], db_id, args[1], client_id, &controller);
         controller.add_game(client_id, game);
         controller.update_player_status(client_id, client_id);
 

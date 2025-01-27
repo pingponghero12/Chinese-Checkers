@@ -1,5 +1,4 @@
 #include "db_connector.hpp"
-#include <sstream>
 
 DbConnector::DbConnector(std::string ip, std::string username, std::string password) : username(username) {
     try {
@@ -34,7 +33,7 @@ void DbConnector::insert_move(int game, int move_id, int x1, int y1, int x2, int
         const std::string query = "INSERT INTO MOVES (game_id, move_id, x1, y1, x2, y2) "
             "VALUES (?, ?, ?, ?, ?, ?)";
 
-        execute(query, { std::to_string(game), 
+        return execute_insert(query, { std::to_string(game), 
                               std::to_string(move_id),
                               std::to_string(x1),
                               std::to_string(y1),
@@ -43,44 +42,17 @@ void DbConnector::insert_move(int game, int move_id, int x1, int y1, int x2, int
                               });
     }
     catch(sql::SQLException& e) {
-        std::cerr << "Failed to insert move: " << e.what() << std::endl;
+        std::cerr << "Failed to insert game: " << e.what() << std::endl;
         throw;
     }
+
 }
 
-std::vector<std::string> DbConnector::get_games() {
-    std::unique_ptr<sql::ResultSet> result;
-
-    const std::string query = "SELECT game_type, players, created_at FROM GAMES ORDER BY created_at DES LIMIT 20";
-
-    result = request(query, {});
-
-    std::vector<std::string> games;
-
-    while(result->next()) {
-        int game_type = result->getInt("game_type");
-        int players = result->getInt("players");
-        std::string created_at = result->getString("created_at");
-
-        std::stringstream game_info;
-        game_info << "Game type: " <<game_type << " Players " << players
-            << " Date: " <<created_at;
-
-        games.push_back(game_info.str());
-    }
-
-    return games;
-}
-
-std::unique_ptr<sql::ResultSet> DbConnector::request(const std::string& query, const std::vector<std::string>& params) {
+sql::ResultSet* DbConnector::request(std::string query) {
     try {
         std::unique_ptr<sql::PreparedStatement> stmt(conn->prepareStatement(query));
 
-        for(size_t i = 0; i < params.size(); ++i) {
-            stmt->setString(i + 1, params[i]);
-        }
-
-        return std::unique_ptr<sql::ResultSet>(stmt->executeQuery());
+        return stmt->executeQuery();
     }
     catch(sql::SQLException& e) {
         std::cerr << "SQL Error: " << e.what() << std::endl;
