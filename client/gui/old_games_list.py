@@ -1,11 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QListWidget, QMessageBox
 from PyQt5.QtCore import Qt
 
-"""
-LobbiesList class is a QWidget that represents the list of available lobbies.
-It allows the player to join a lobby, create a new game, or go back to the main menu.
-"""
-
 class OldGamesList(QWidget):
     def __init__(self, switch_to_game, switch_to_main, create_game):
         super().__init__()
@@ -39,7 +34,7 @@ class OldGamesList(QWidget):
 
     def join_old_game(self):
         selected = self.list_widget.currentItem().text()
-        selected = selected.split(" - ")
+        selected = selected.split(" ")
         selected = selected[0]
         print(f"selected {selected}")
         if selected:

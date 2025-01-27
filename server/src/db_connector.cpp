@@ -51,19 +51,20 @@ void DbConnector::insert_move(int game, int move_id, int x1, int y1, int x2, int
 std::vector<std::string> DbConnector::get_games() {
     std::unique_ptr<sql::ResultSet> result;
 
-    const std::string query = "SELECT game_type, players, created_at FROM GAMES ORDER BY created_at DES LIMIT 20";
+    const std::string query = "SELECT game_id, game_type, players, created_at FROM GAMES ORDER BY created_at DES LIMIT 20";
 
     result = request(query, {});
 
     std::vector<std::string> games;
 
     while(result->next()) {
+        int game_id = result->getInt("game_id");
         int game_type = result->getInt("game_type");
         int players = result->getInt("players");
         std::string created_at = result->getString("created_at");
 
         std::stringstream game_info;
-        game_info << "Game type: " <<game_type << " Players " << players
+        game_info << game_id <<" Game type: " <<game_type << " Players " << players
             << " Date: " <<created_at;
 
         games.push_back(game_info.str());
