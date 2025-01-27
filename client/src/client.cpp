@@ -30,6 +30,8 @@ Client::Client(const std::string& ip, int port)
         {"join", "3"},
         {"move", "4"},
         {"exit", "5"},
+        {"old_list", "6"},
+        {"old_next_move", "7"}
     };
 }
 
@@ -113,7 +115,7 @@ void Client::receive_messages() {
             std::cout << args[0] << args[1] << std::endl;
             create_board(args[0], args[2]);
             std::cout << message << std::endl;
-        } 
+        }
         else if (message.substr(0, 6) == "exited") {
             exit_board();
         }
@@ -178,6 +180,7 @@ void Client::exit_board() {
  *          - "join" -> "3"
  *          - "move" -> "4"
  *          - "exit" -> "5"
+ *          other...
  */
 
 std::string Client::transform_message(const std::string& input) {

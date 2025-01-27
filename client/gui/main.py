@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
 from game_window import GameWindow
+from old_games_list import OldGamesList
 from about_dialog import AboutDialog
 import time
 
@@ -57,12 +58,14 @@ class MainWindow(QWidget):
         """
         self.stack = QStackedWidget()
 
-        self.main_menu = MainMenu(self.show_lobbies, self.show_about)
+        self.main_menu = MainMenu(self.switch_to_lobbies, self.show_about, self.switch_to_old_games)
         self.lobbies_list = LobbiesList(self.join_game, self.show_main_menu, self.create_game)
+        self.old_games_list = OldGamesList(self.join_game, self.show_main_menu, self.create_game)
         self.game_window = None # Will be created when join lobby
 
         self.stack.addWidget(self.main_menu)
         self.stack.addWidget(self.lobbies_list)
+        self.stack.addWidget(self.old_games_list)
 
         layout = QVBoxLayout()
         layout.addWidget(self.stack)
@@ -74,13 +77,18 @@ class MainWindow(QWidget):
         """
         self.stack.setCurrentWidget(self.main_menu)
 
-    def show_lobbies(self):
+    def switch_to_lobbies(self):
         """!
         @brief Switch to the lobby list screen and request lobby list from server
         """
         print("show lobby py")
         self.client.send_message("list")
         self.stack.setCurrentWidget(self.lobbies_list)
+
+    def switch_to_old_games(self):
+        print("show old gamespy")
+        self.client.send_message("old_list")
+        self.stack.setCurrentWidget(self.old_games_list)
 
     def show_about(self):
         """!
@@ -146,7 +154,7 @@ class MainWindow(QWidget):
         @brief Leave the current game and return to lobby list
         """
         self.client.send_message("exit")
-        self.show_lobbies()
+        self.switch_to_lobbies()
         self.my_id = None
 
     def get_pg(self):
