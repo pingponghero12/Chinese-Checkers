@@ -17,7 +17,7 @@ public:
     std::vector<int> get_move(int game, int move_id);
 
 private:
-    // Unique since it will only be used in function there we want to destroy it
+    // Unique since it will only be used in function then we want to destroy it
     std::unique_ptr<sql::ResultSet> request(const std::string& query, const std::vector<std::string>& params);
     void execute(const std::string& query, const std::vector<std::string>& params);
     int execute_insert(const std::string& query, const std::vector<std::string>& params);

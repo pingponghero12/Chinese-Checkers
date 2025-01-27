@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "server_controller.hpp"
+#include "db_connector.hpp"
 
 Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), controller(controller_ptr) {
     players.push_back(client_id);
@@ -52,7 +53,7 @@ void Game::end() {
             std::cerr << "Error: Controller is null" << std::endl;
         }
     }
-    
+
     if (controller) {
         controller->delete_game(id);
     }

@@ -72,6 +72,25 @@ std::vector<std::string> DbConnector::get_games() {
     return games;
 }
 
+std::vector<int> DbConnector::get_move(int game, int move_id) {
+    std::unique_ptr<sql::ResultSet> result;
+
+    const std::string query = "SELECT x1, y1, x2, y2 FROM MOVES WHERE game_id = ?, move_id = ?";
+
+    result = request(query, {std::to_string(game), std::to_string(move_id)});
+
+    std::vector<int> move;
+
+    while(result->next()) {
+        move.push_back(result->getInt("x1"));
+        move.push_back(result->getInt("y1"));
+        move.push_back(result->getInt("x2"));
+        move.push_back(result->getInt("y2"));
+    }
+
+    return move;
+}
+
 std::unique_ptr<sql::ResultSet> DbConnector::request(const std::string& query, const std::vector<std::string>& params) {
     try {
         std::unique_ptr<sql::PreparedStatement> stmt(conn->prepareStatement(query));

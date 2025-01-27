@@ -1,6 +1,6 @@
 CREATE TABLE GAMES (
     game_id INT AUTO_INCREMENT PRIMARY KEY,
-    game_type VARCHAR(50) PRIMARY
+    game_type VARCHAR(50),
     players INT,
     moves INT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -26,5 +26,5 @@ BEGIN
     UPDATE GAMES
     SET move_id = move_id + 1
     WHERE game_id = NEW.game_id;
-END=$$
+END$$
 DELIMITER ;
