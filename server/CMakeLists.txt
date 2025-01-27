@@ -12,10 +12,19 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -pthread")
 set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 
-include_directories(include)
+include_directories(include
+    $ENV{NIX_CFLAGS_COMPILE})
+
+
+find_library(MYSQLCPPCONN_LIBRARY
+    NAMES mysqlcppconn
+    PATHS ${CMAKE_PREFIX_PATH}/lib)
 
 file(GLOB SOURCES "src/*.cpp")
 
 add_executable(server ${SOURCES})
+
+target_link_libraries(server
+    ${MYSQLCPPCONN_LIBRARY})
 
 add_subdirectory(tests)

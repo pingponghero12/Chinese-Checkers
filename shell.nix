@@ -18,6 +18,7 @@ pkgs.mkShell {
     xorg.libxcb
     libGL
     libxkbcommon
+    libmysqlconnectorcpp
   ];
 
   shellHook = ''

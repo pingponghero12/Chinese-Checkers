@@ -10,6 +10,7 @@
 
 #include "game.hpp"
 #include "abstract_command.hpp"
+#include "db_connector.hpp"
 
 /**
  * @brief ServerController class
@@ -38,6 +39,8 @@ public:
 
     mutable std::mutex games_mutex;
     mutable std::mutex status_mutex;
+
+    std::unique_ptr<DbConnector> dbconn;
 
 private:
     Server* server;

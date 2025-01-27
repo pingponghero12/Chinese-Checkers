@@ -1,19 +1,12 @@
 #ifndef __CMDLISTGAMES__
 #define __CMDLISTGAMES__
 
-#include <iostream>
-#include <thread>
 #include <vector>
 #include <string>
 #include <cstring>
-#include <mutex>
-#include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <unordered_map>
-#include <memory>
-#include <sstream>
 
 #include "abstract_command.hpp"
 #include "server_controller.hpp"

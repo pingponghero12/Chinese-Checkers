@@ -25,6 +25,7 @@ target_link_libraries(server_tests
         GTest::GTest
         GTest::Main
         pthread
+        ${MYSQLCPPCONN_LIBRARY}
 )
 
 target_sources(server_tests 
@@ -34,7 +35,8 @@ target_sources(server_tests
         ${CMAKE_SOURCE_DIR}/src/server_controller.cpp
         ${CMAKE_SOURCE_DIR}/src/server.cpp
         ${CMAKE_SOURCE_DIR}/src/standard_board.cpp
-        ${CMAKE_SOURCE_DIR}/src/init_cmds.cpp  # Added this line
+        ${CMAKE_SOURCE_DIR}/src/init_cmds.cpp
+        ${CMAKE_SOURCE_DIR}/src/db_connector.cpp
         # Don't include main.cpp as it contains the main() function
 )
 
