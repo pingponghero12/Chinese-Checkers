@@ -31,7 +31,7 @@ Client::Client(const std::string& ip, int port)
         {"move", "4"},
         {"exit", "5"},
         {"old_list", "6"},
-        {"old_next_move", "7"}
+        {"move_history", "7"}
     };
 }
 
@@ -47,10 +47,10 @@ std::vector<int> parse_move(const std::string& message) {
     std::istringstream iss(message);
     
     // Get the command (first token)
-    std::getline(iss, token, ',');
+    std::getline(iss, token, ' ');
     
     // Get the coordinates
-    while (std::getline(iss, token, ',')) {
+    while (std::getline(iss, token, ' ')) {
         try {
             coords.push_back(std::stoi(token));
         } catch (const std::invalid_argument&) {
@@ -109,20 +109,21 @@ void Client::receive_messages() {
         }
 
         std::string message = std::string(buffer);
+        std::cout << message << std::endl;
         if (message.substr(0, 6) == "joined") {
-            std::cout << message << std::endl;
             std::vector<int> args = parse_message_to_vi(message);
-            std::cout << args[0] << args[1] << std::endl;
             create_board(args[0], args[2]);
-            std::cout << message << std::endl;
         }
         else if (message.substr(0, 6) == "exited") {
             exit_board();
         }
         else if (message.substr(0, 4) == "move") {
             std::vector<int> mv = parse_move(message);
+            std::cout << "Board->move " << mv.size() << std::endl;
 
+            std::cout << "Board->move" << mv[0] << mv[1]<<mv[2]<<mv[3] << std::endl;
             board->move(mv[0], mv[1], mv[2], mv[3]);
+            std::cout << "Board->move" << std::endl;
         }
         if (message_callback) {
             message_callback(std::string(buffer));
@@ -156,9 +157,11 @@ std::vector<std::vector<int>> Client::board_state() {
 void Client::create_board(int players, int board_type) {
     if (board_type == 0) {
         board = std::unique_ptr<Board>(new Standard_Board(5));
+        std::cout << "Board created" << std::endl;
     }
     if (board_type == 1) {
         board = std::unique_ptr<Board>(new Fast_Board(5));
+        std::cout << "Board created" << std::endl;
     }
 
     board->setup_board(players);

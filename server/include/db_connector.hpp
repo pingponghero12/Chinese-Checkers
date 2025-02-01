@@ -13,7 +13,7 @@ public:
     void insert_move(int game, int move_id, int x1, int y1, int x2, int y2);
 
     std::vector<std::string> get_games();
-    std::vector<int> get_game(int game);
+    std::vector<int> get_game(const int& db_game_id);
     std::vector<int> get_move(int game, int move_id);
 
 private:

@@ -63,7 +63,7 @@ void Game::end() {
 }
 
 void Game::move(int client_id, int x1, int y1, int x2, int y2) {
-    std::string out =  "move," + std::to_string(x1) + "," + std::to_string(y1) + "," + std::to_string(x2) + "," + std::to_string(y2);
+    std::string out =  "move " + std::to_string(x1) + " " + std::to_string(y1) + " " + std::to_string(x2) + " " + std::to_string(y2);
 
     controller->dbconn->insert_move(db_id, move_id, x1, y1, x2, y2);
 

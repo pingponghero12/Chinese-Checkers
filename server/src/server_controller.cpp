@@ -94,7 +94,7 @@ void ServerController::parse_call(const std::string& message, int client_id) {
     int command_id = args[0];
     args.erase(args.begin());
 
-    std::array<int, 3> main_cmds = {1, 2, 3};
+    std::array<int, 5> main_cmds = {1, 2, 3, 6};
 
     bool client_in_game = is_in_game(client_id);
     bool is_main_command = std::find(std::begin(main_cmds), std::end(main_cmds), command_id) != std::end(main_cmds);

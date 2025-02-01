@@ -185,7 +185,7 @@ class ChineseCheckersBoard(QWidget):
         self.current_player = (self.current_player + 1) % self.pg()
 
         self.update()
-        print(f"Updated player {self.current_player} you {self.my_id()}")
+        print(f"Updated player {self.current_player} you {self.my_id}")
 
     def rizz(self):
         """

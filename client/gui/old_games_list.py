@@ -23,7 +23,7 @@ class OldGamesList(QWidget):
 
         # Buttons
         btn_join = QPushButton("Watch Old Game")
-        btn_join.clicked.connect(self.switch_to_game)
+        btn_join.clicked.connect(self.join_old_game)
         layout.addWidget(btn_join)
 
         btn_back = QPushButton("Back to Main Menu")
