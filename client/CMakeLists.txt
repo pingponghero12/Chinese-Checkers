@@ -18,7 +18,7 @@ find_package(Python COMPONENTS Interpreter Development REQUIRED)
 set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -flto=auto")
 set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 
 include_directories(include)

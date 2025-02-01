@@ -27,7 +27,7 @@ protected:
      * This method deallocates the Server instance to prevent memory leaks.
      */
     void TearDown() override {
-        delete server;
+        // delete server;
     }
 };
 

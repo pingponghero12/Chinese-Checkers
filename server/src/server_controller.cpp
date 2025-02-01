@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <array>
 
 #include "server_controller.hpp"
 #include "server.hpp"

@@ -1,19 +1,11 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include <iostream>
-#include <thread>
 #include <vector>
-#include <string>
 #include <cstring>
-#include <mutex>
-#include <algorithm>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <unordered_map>
-#include <memory>
-#include <sstream>
 
 /**
  * @brief Game class
@@ -38,7 +30,7 @@ public:
     void remove_player(int client_id);
 
     void game_logic();
-    void move(int client_id, int x1, int y1, int x2, int y2);
+    void move(int x1, int y1, int x2, int y2);
     void end();
 private:
     std::vector<int> players;

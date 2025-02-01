@@ -51,7 +51,7 @@ void DbConnector::insert_move(int game, int move_id, int x1, int y1, int x2, int
 std::vector<int> DbConnector::get_game(const int& db_game_id) {
     std::unique_ptr<sql::ResultSet> result;
 
-    const std::string query = "SELECT game_id, game_type, players, created_at FROM GAMES WHERE ?";
+    const std::string query = "SELECT game_id, game_type, players, created_at FROM GAMES WHERE game_id = ?";
 
     result = request(query, {std::to_string(db_game_id)});
 

@@ -1,6 +1,7 @@
 #include <iostream>
-#include "board.hpp"
 #include <vector>
+
+#include "board.hpp"
 
 Board::Board(int board_size)
     : size(board_size), 

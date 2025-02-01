@@ -80,7 +80,7 @@ protected:
      */
     void TearDown() override {
         delete controller;
-        delete mockServer;
+        //delete mockServer;
     }
 };
 

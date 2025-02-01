@@ -1,7 +1,6 @@
 #ifndef fast_board_hpp
 #define fast_board_hpp
 
-#include <iostream>
 #include <vector>
 #include "board.hpp"
 

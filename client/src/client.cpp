@@ -10,6 +10,7 @@
 #include <memory>
 
 #include "client.hpp"
+#include "board.hpp"
 #include "fast_board.hpp"
 #include "standard_board.hpp"
 
