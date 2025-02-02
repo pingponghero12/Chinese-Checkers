@@ -4,6 +4,8 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from main_menu import MainMenu
 from lobbies_list import LobbiesList
 from game_window import GameWindow
+from history_window import HistoryWindow
+from old_games_list import OldGamesList
 from about_dialog import AboutDialog
 import time
 
@@ -57,12 +59,14 @@ class MainWindow(QWidget):
         """
         self.stack = QStackedWidget()
 
-        self.main_menu = MainMenu(self.show_lobbies, self.show_about)
+        self.main_menu = MainMenu(self.switch_to_lobbies, self.show_about, self.switch_to_old_games)
         self.lobbies_list = LobbiesList(self.join_game, self.show_main_menu, self.create_game)
+        self.old_games_list = OldGamesList(self.switch_to_history_game, self.show_main_menu, self.create_game)
         self.game_window = None # Will be created when join lobby
 
         self.stack.addWidget(self.main_menu)
         self.stack.addWidget(self.lobbies_list)
+        self.stack.addWidget(self.old_games_list)
 
         layout = QVBoxLayout()
         layout.addWidget(self.stack)
@@ -74,13 +78,33 @@ class MainWindow(QWidget):
         """
         self.stack.setCurrentWidget(self.main_menu)
 
-    def show_lobbies(self):
+    def switch_to_lobbies(self):
         """!
         @brief Switch to the lobby list screen and request lobby list from server
         """
         print("show lobby py")
         self.client.send_message("list")
         self.stack.setCurrentWidget(self.lobbies_list)
+
+    def switch_to_old_games(self):
+        print("show old gamespy")
+        self.client.send_message("old_list")
+        self.stack.setCurrentWidget(self.old_games_list)
+
+    def switch_to_history_game(self, lobby_name):
+        """!
+        @brief Join an existing game lobby
+        @param lobby_name The name of the lobby to join
+        """
+        self.client.send_message(f"join 1 {lobby_name}")
+
+        time.sleep(0.1)
+        if self.game_window:
+            self.stack.removeWidget(self.game_window)
+
+        self.game_window = HistoryWindow(lobby_name, self.leave_game, self.get_my_id, self.get_pg, self.send_move_history, self.client.possible_moves, self.client.board_state)
+        self.stack.addWidget(self.game_window)
+        self.stack.setCurrentWidget(self.game_window)
 
     def show_about(self):
         """!
@@ -94,7 +118,7 @@ class MainWindow(QWidget):
         @brief Join an existing game lobby
         @param lobby_name The name of the lobby to join
         """
-        self.client.send_message(f"join {lobby_name}")
+        self.client.send_message(f"join 0 {lobby_name}")
 
         time.sleep(0.1)
         if self.game_window:
@@ -109,6 +133,13 @@ class MainWindow(QWidget):
         @param mv List containing move coordinates [x1, y1, x2, y2]
         """
         self.client.send_message(f"move {mv[0]} {mv[1]} {mv[2]} {mv[3]}")
+
+    def send_move_history(self, move_id, game_id):
+        """!
+        @brief Send a move to the server
+        @param mv List containing move coordinates [x1, y1, x2, y2]
+        """
+        self.client.send_message(f"move_history {game_id} {move_id}")
 
     def create_game(self):
         """!
@@ -146,7 +177,7 @@ class MainWindow(QWidget):
         @brief Leave the current game and return to lobby list
         """
         self.client.send_message("exit")
-        self.show_lobbies()
+        self.switch_to_lobbies()
         self.my_id = None
 
     def get_pg(self):
@@ -188,16 +219,28 @@ class MainWindow(QWidget):
             for lobby in lobbies:
                 self.lobbies_list.list_widget.addItem(lobby)
 
+        if message.startswith("history:"):
+            lobby_data = message.split("\n", 1)[1]
+            lobbies = lobby_data.split("\n")
+
+            self.old_games_list.list_widget.clear()
+            for lobby in lobbies:
+                self.old_games_list.list_widget.addItem(lobby)
+
         if message.startswith("joined"):
             args = self.parse_message_to_vi(message)
             self.my_id = args[1] - 1
             self.pg = args[0]
 
-        if message.startswith("move,"):
-            mv = message.split(",", 1)[1]
-            mv = mv.split(",")
+        if message.startswith("move"):
+            mv = message.split(" ", 1)[1]
+            mv = mv.split(" ")
             mv = [int(x) for x in mv]
             self.game_window.board.move(mv)
+
+        if message.startswith("exited"):
+            self.switch_to_lobbies()
+
 
     def closeEvent(self, event):
         """!

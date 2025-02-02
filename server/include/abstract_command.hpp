@@ -2,7 +2,6 @@
 #define __ABSTRACTCOMMAND__
 
 #include <vector>
-#include <string>
 /**
  * @brief Abstract class for commands
  * Executing a command is done by calling the execute function

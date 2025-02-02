@@ -2,6 +2,11 @@
 #include "server_controller.hpp"
 #include "db_connector.hpp"
 
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <memory>
+
 Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), controller(controller_ptr) {
     players.push_back(client_id);
     move_id = 0;
@@ -62,8 +67,8 @@ void Game::end() {
     }
 }
 
-void Game::move(int client_id, int x1, int y1, int x2, int y2) {
-    std::string out =  "move," + std::to_string(x1) + "," + std::to_string(y1) + "," + std::to_string(x2) + "," + std::to_string(y2);
+void Game::move(int x1, int y1, int x2, int y2) {
+    std::string out =  "move " + std::to_string(x1) + " " + std::to_string(y1) + " " + std::to_string(x2) + " " + std::to_string(y2);
 
     controller->dbconn->insert_move(db_id, move_id, x1, y1, x2, y2);
 

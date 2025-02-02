@@ -1,7 +1,6 @@
 #ifndef standard_board_hpp
 #define standard_board_hpp
 
-#include <iostream>
 #include <vector>
 #include "board.hpp"
 

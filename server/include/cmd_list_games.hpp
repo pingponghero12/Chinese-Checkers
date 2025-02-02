@@ -24,6 +24,11 @@ public:
     CmdListGames(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_id) {
+        if (args.size() != 0) {
+            std::cerr << "Error: args should be empty" << std::endl;
+            return;
+        }
+        
         std::vector<Game> games = controller.game_list();
 
         std::string out = "lobbies:";

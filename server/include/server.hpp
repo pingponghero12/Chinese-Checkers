@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 #include <unordered_map>
 
-#include "server_controller.hpp"
+class ServerController;
 
 #define BUFFER_SIZE 1024
 /**

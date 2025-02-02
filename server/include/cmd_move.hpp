@@ -38,7 +38,7 @@ public:
 
         {
             std::lock_guard<std::mutex> lock(controller.status_mutex);
-            controller.current_games[game_id].move(client_id, x1, y1, x2, y2);
+            controller.current_games[game_id].move(x1, y1, x2, y2);
         }
     }
 

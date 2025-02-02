@@ -6,7 +6,6 @@
 #include <mutex>
 #include <unordered_map>
 #include <memory>
-#include <array>
 
 #include "game.hpp"
 #include "abstract_command.hpp"

@@ -8,8 +8,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "board.hpp"
-
+class Board;
 
 /**
  * @brief The Client class is responsible for connecting to the server, sending and receiving messages.

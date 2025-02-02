@@ -17,7 +17,11 @@ public:
     CmdListHistory(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_id) {
-        // std::vector<Game> games = controller.game_list();
+        if (args.size() != 0) {
+            std::cerr << "Error: args should be empty" << std::endl;
+            return;
+        }
+
         std::vector<std::string> games = controller.dbconn->get_games();
         std::string out = "history:\n";
 

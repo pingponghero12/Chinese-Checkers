@@ -14,7 +14,7 @@ DbConnector::DbConnector(std::string ip, std::string username, std::string passw
     }
 }
 
-int DbConnector::insert_game(int game_type, int players) {
+int DbConnector::insert_game(int players, int game_type) {
     try {
         const std::string query = "INSERT INTO GAMES (game_type, players) "
             "VALUES (?, ?)";
@@ -48,22 +48,41 @@ void DbConnector::insert_move(int game, int move_id, int x1, int y1, int x2, int
     }
 }
 
+std::vector<int> DbConnector::get_game(const int& db_game_id) {
+    std::unique_ptr<sql::ResultSet> result;
+
+    const std::string query = "SELECT game_id, game_type, players, created_at FROM GAMES WHERE game_id = ?";
+
+    result = request(query, {std::to_string(db_game_id)});
+
+    std::vector<int> out(3);
+
+    while(result->next()) {
+        out[0] = result->getInt("game_id");
+        out[1] = result->getInt("game_type");
+        out[2] = result->getInt("players");
+    }
+
+    return out;
+}
+
 std::vector<std::string> DbConnector::get_games() {
     std::unique_ptr<sql::ResultSet> result;
 
-    const std::string query = "SELECT game_type, players, created_at FROM GAMES ORDER BY created_at DES LIMIT 20";
+    const std::string query = "SELECT game_id, game_type, players, created_at FROM GAMES ORDER BY created_at LIMIT 20";
 
     result = request(query, {});
 
     std::vector<std::string> games;
 
     while(result->next()) {
+        int game_id = result->getInt("game_id");
         int game_type = result->getInt("game_type");
         int players = result->getInt("players");
         std::string created_at = result->getString("created_at");
 
         std::stringstream game_info;
-        game_info << "Game type: " <<game_type << " Players " << players
+        game_info << game_id <<" Game type: " <<game_type << " Players " << players
             << " Date: " <<created_at;
 
         games.push_back(game_info.str());
@@ -75,7 +94,7 @@ std::vector<std::string> DbConnector::get_games() {
 std::vector<int> DbConnector::get_move(int game, int move_id) {
     std::unique_ptr<sql::ResultSet> result;
 
-    const std::string query = "SELECT x1, y1, x2, y2 FROM MOVES WHERE game_id = ?, move_id = ?";
+    const std::string query = "SELECT x1, y1, x2, y2 FROM MOVES WHERE game_id = ? AND move_id = ?";
 
     result = request(query, {std::to_string(game), std::to_string(move_id)});
 
