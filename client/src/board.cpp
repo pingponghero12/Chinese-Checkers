@@ -160,3 +160,14 @@ void Board::set_Field(int x, int y, char value) {
 int Board::get_size() const {
     return size;
 }
+
+
+std::vector<std::pair<int, int>> Board::possible_moves(int x, int y){
+    std::vector<std::pair<int, int>> result;
+    std::vector<std::pair<int, int>> shifts = possible_shifts(x, y);
+    std::vector<std::pair<int, int>> jumps = possible_jumps(x, y, x, y);
+    result.insert(result.end(), shifts.begin(), shifts.end());
+    result.insert(result.end(), jumps.begin(), jumps.end());
+    
+    return result;
+}
