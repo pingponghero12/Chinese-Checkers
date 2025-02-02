@@ -17,6 +17,21 @@ make
 ./server # or ./client
 ```
 
+```bash
+# Run docker service
+sudo dockerd &
+
+# Clean docker
+sudo docker-compose down -v
+
+# Run docker
+sudo docker-compose build --no-cache
+sudo docker-compose up -d
+
+# For checking stuff
+sudo docker-compose exec db mariadb -u admin -p cc_db
+```
+
 ### System diagram
 ![System diagram](uml/system.png)
 

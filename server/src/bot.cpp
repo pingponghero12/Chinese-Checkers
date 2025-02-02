@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
 #include "board.hpp"
-#include "Bot.hpp"
+#include "bot.hpp"
 #include <cmath>
 
 //Możliwe że będzie potrzebny osobny bot do każdej planszy
 
-Bot::Bot(Board* board) : board(board) {
+Bot::Bot(std::shared_ptr<Board> board) : board(board) {
     //Constructor for the bot
 }
 

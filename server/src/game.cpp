@@ -1,15 +1,36 @@
 #include "game.hpp"
 #include "server_controller.hpp"
 #include "db_connector.hpp"
+#include "board.hpp"
+#include "bot.hpp"
+#include "standard_board.hpp"
+#include "fast_board.hpp"
 
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <memory>
 
-Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), controller(controller_ptr) {
+Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr, int with_bot) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), controller(controller_ptr) {
     players.push_back(client_id);
     move_id = 0;
+
+    if (board_type == 0) {
+        board_obj = std::shared_ptr<Board>(new Standard_Board(5));
+    }
+    if (board_type == 1) {
+        board_obj = std::shared_ptr<Board>(new Fast_Board(5));
+    }
+    board_obj->setup_board(game_type);
+
+    if (with_bot != 0) {
+        number_of_bots = number_of_players - 1;
+
+        for(int i = 0; i < number_of_bots; i++) {
+            Bot temp_bot(board_obj);
+            bots.push_back(temp_bot);
+        }
+    }
 }
 
 int Game::get_id() {

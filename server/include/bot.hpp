@@ -1,19 +1,20 @@
 #ifndef Bot_hpp
 #define Bot_hpp
 
-#include <iostream>
 #include <vector>
+#include <memory>
+
 #include "board.hpp"
 
 class Bot  {
     private:
-        Board* board;
+        std::shared_ptr<Board> board;
         char color;
         std::vector<std::vector<int>> checkers;
         std::vector<std::pair<int, int>> destination;
 
     public:
-        Bot(Board* board);
+        Bot(std::shared_ptr<Board> board);
         void set_color(char color);
         void get_checkers();
         void set_destination();
