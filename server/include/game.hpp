@@ -38,6 +38,8 @@ public:
     void game_logic();
     void move(int x1, int y1, int x2, int y2);
     void end();
+
+    void move_bot();
 private:
     std::vector<int> players;
     int id;
@@ -46,6 +48,7 @@ private:
     int board_type;
     int move_id;
     int number_of_bots;
+    int with_bot;
     ServerController* controller;
 
     std::vector<Bot> bots;

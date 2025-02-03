@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <memory>
 
-Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr, int with_bot) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), controller(controller_ptr) {
+Game::Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr, int with_bot) : id(client_id), db_id(db_id), game_type(number_of_players), board_type(board), with_bot(with_bot), controller(controller_ptr) {
     players.push_back(client_id);
     move_id = 0;
 
@@ -37,6 +37,7 @@ Game::Game(int number_of_players, int db_id, int board, int client_id, ServerCon
         bots[i].get_checkers();
         bots[i].set_destination();
     }
+}
 
 int Game::get_id() {
     return id;
@@ -104,19 +105,20 @@ void Game::move(int x1, int y1, int x2, int y2) {
 
     // Update move id for database
     move_id++;
+    if (with_bot == 1) {
+        move_bot();
+    }
 }
 
 //Call this function when initializing the game
 void Game::move_bot() {
-    if(with_bot == 0) {
-        return;
-    }
-    while(true){
-        if(move_id % number_of_players == 1){
-            for(int i = 0; i < number_of_bots; i++){
-                bots[i].make_move();
-                move(bots[i].get_x1(), bots[i].get_y1(), bots[i].get_x2(), bots[i].get_y2());
-            }
-        }
+    if(move_id % game_type != 0) {
+        std::cout << "CHUJNIGGER1" << std::endl;
+        int bot_to_move = (move_id % game_type) - 1;
+
+        std::cout << "CHUJNIGGER2" << std::endl;
+        bots[bot_to_move].make_move();
+        move(bots[bot_to_move].get_x1(), bots[bot_to_move].get_y1(), bots[bot_to_move].get_x2(), bots[bot_to_move].get_y2());
+        std::cout << "CHUJNIGGER3" << std::endl;
     }
 }
