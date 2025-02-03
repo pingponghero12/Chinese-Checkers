@@ -91,6 +91,10 @@ package "Server System" {
         - ServerController* controller
     }
 
+    class BoardFactory {
+        + static std::shared_ptr<Board> create_board(int board_type, int size)
+    }
+
     abstract class Board {
         + Board(int board_size)
         + virtual ~Board()
@@ -176,6 +180,8 @@ package "Server System" {
     Game --> DbConnector : uses
     Bot --> Board : uses
     ServerController --> DbConnector : uses
+    Game --> BoardFactory : uses
+    BoardFactory --> Board : creates
 }
 
 main --> Server : creates and uses
