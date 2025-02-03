@@ -1,17 +1,18 @@
 #include <iostream>
 #include <vector>
 #include "board.hpp"
-#include "Bot.hpp"
+#include "bot.hpp"
 #include <cmath>
 
 //Możliwe że będzie potrzebny osobny bot do każdej planszy
 
-Bot::Bot(Board* board) : board(board) {
+Bot::Bot(std::shared_ptr<Board> board) : board(board) {
     //Constructor for the bot
 }
 
-void Bot::set_color(char color) {
-    this->color = color;
+void Bot::set_color(int color_int) {
+    char color_char = '0' + color_int;
+    this->color = color_char;
 }
 
 void Bot::get_checkers() {
@@ -81,9 +82,29 @@ void Bot::make_move(){
     }
     board->move(best_checker[0], best_checker[1], best_move.first, best_move.second);
     std::cout<<"best move: " << best_checker[0] << " " << best_checker[1] << " " << best_move.first << " " << best_move.second << std::endl;
+    x1 = best_checker[0];
+    y1 = best_checker[1];
+    x2 = best_move.first;
+    y2 = best_move.second;
     //Update checkers
     checkers.clear();
     get_checkers();
 
+}
+
+int Bot::get_x1(){
+    return x1;
+}
+
+int Bot::get_y1(){
+    return y1;
+}
+
+int Bot::get_x2(){
+    return x2;
+}
+
+int Bot::get_y2(){
+    return y2;
 }
 

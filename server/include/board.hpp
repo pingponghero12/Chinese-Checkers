@@ -1,7 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <iostream>
 #include <vector>
 
 /**
@@ -34,6 +33,7 @@ public:
     void fill_hexagon();
     virtual std::vector<std::pair<int,int>> possible_shifts(int x, int y) = 0;
     virtual std::vector<std::pair<int,int>> possible_jumps(int x, int y, int a, int b) = 0;
+    std::vector<std::pair<int, int>> possible_moves(int x, int y);
     
 
     std::vector<std::vector<char>> getFields() const;

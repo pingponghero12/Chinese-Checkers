@@ -161,8 +161,14 @@ class MainWindow(QWidget):
                                         min=0,
                                         max=1)
 
+        with_bot, ok = QInputDialog.getInt(self, 
+                                        "With bot 1->true, 0->false ",
+                                       "asdf",
+                                        min=0,
+                                        max=1)
 
-        self.client.send_message(f"create {number} {board_type}")
+
+        self.client.send_message(f"create {number} {board_type} {with_bot}")
         time.sleep(0.1)
 
         if self.game_window:

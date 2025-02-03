@@ -25,14 +25,14 @@ public:
     CmdAddGame(ServerController& controller) : controller(controller) {}
 
     void execute(const std::vector<int>& args, int client_id) {
-        if (args.size() != 2) {
+        if (args.size() != 3) {
             std::cerr << "Error: must set number of players and game type" << std::endl;
             return;
         }
 
         int db_id = controller.dbconn->insert_game(args[0], args[1]);
 
-        Game game(args[0], db_id, args[1], client_id, &controller);
+        Game game(args[0], db_id, args[1], client_id, &controller, args[2]);
         controller.add_game(client_id, game);
         controller.update_player_status(client_id, client_id);
 

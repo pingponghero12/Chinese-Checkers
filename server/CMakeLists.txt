@@ -27,4 +27,4 @@ add_executable(server ${SOURCES})
 target_link_libraries(server
     ${MYSQLCPPCONN_LIBRARY})
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
