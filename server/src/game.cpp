@@ -21,7 +21,7 @@ Game::Game(int number_of_players, int db_id, int board, int client_id, ServerCon
     if (board_type == 1) {
         board_obj = std::shared_ptr<Board>(new Fast_Board(5));
     }
-    board_obj->setup_board(game_type);
+    board_obj->setup_board(number_of_players);
 
     if (with_bot != 0) {
         number_of_bots = number_of_players - 1;
@@ -31,7 +31,12 @@ Game::Game(int number_of_players, int db_id, int board, int client_id, ServerCon
             bots.push_back(temp_bot);
         }
     }
-}
+
+    for(int i = 0; i < number_of_bots; i++) {
+        bots[i].set_color(i + 2);
+        bots[i].get_checkers();
+        bots[i].set_destination();
+    }
 
 int Game::get_id() {
     return id;
@@ -99,4 +104,19 @@ void Game::move(int x1, int y1, int x2, int y2) {
 
     // Update move id for database
     move_id++;
+}
+
+//Call this function when initializing the game
+void Game::move_bot() {
+    if(with_bot == 0) {
+        return;
+    }
+    while(true){
+        if(move_id % number_of_players == 1){
+            for(int i = 0; i < number_of_bots; i++){
+                bots[i].make_move();
+                move(bots[i].get_x1(), bots[i].get_y1(), bots[i].get_x2(), bots[i].get_y2());
+            }
+        }
+    }
 }
