@@ -1,8 +1,8 @@
-#include <iostream>
 #include <vector>
+#include <cmath>
+
 #include "board.hpp"
 #include "bot.hpp"
-#include <cmath>
 
 //Możliwe że będzie potrzebny osobny bot do każdej planszy
 
@@ -19,7 +19,6 @@ void Bot::get_checkers() {
     for (int i = 0; i <= 4 * (board->get_size() - 1); i++) {
         for (int j = 0; j <= 6 * (board->get_size() - 1); j++) {
             if (board->get_Field(i, j) == color) {
-                std::cout << i << " " << j << std::endl;
                 checkers.push_back(std::vector<int>{i, j});
             }
         }
@@ -30,12 +29,10 @@ void Bot::set_destination(){
     for(auto checker : checkers){
         if(checker[0] == 0 && checker [1] == 12){
             destination.push_back(std::make_pair(16, 12));
-            std::cout << "destination: " << destination[0].first << " " << destination[0].second << std::endl;
         }
 
         if(checker[0] == 16 && checker [1] == 12){
             destination.push_back(std::make_pair(0, 12));
-            std::cout << "destination: " << destination[0].first << " " << destination[0].second << std::endl;
             
         }
 
@@ -72,7 +69,6 @@ void Bot::make_move(){
         current_distance = get_distance(checker[0], checker[1]);
         for(auto move : moves){
             int new_distance = get_distance(move.first, move.second);
-            std::cout <<"chekers: " << checker[0] << " " << checker[1]<<" cur distance "<<current_distance<< " move: " << move.first <<" "<< move.second <<" new distance: "<<new_distance << std::endl;
             if(current_distance - new_distance > difference){
                 difference = current_distance - new_distance;
                 best_checker = checker;
@@ -81,7 +77,6 @@ void Bot::make_move(){
         }
     }
     board->move(best_checker[0], best_checker[1], best_move.first, best_move.second);
-    std::cout<<"best move: " << best_checker[0] << " " << best_checker[1] << " " << best_move.first << " " << best_move.second << std::endl;
     x1 = best_checker[0];
     y1 = best_checker[1];
     x2 = best_move.first;

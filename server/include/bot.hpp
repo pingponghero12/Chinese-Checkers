@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "board.hpp"
+class Board;
 
 class Bot  {
     private:
@@ -20,12 +20,13 @@ class Bot  {
         void get_checkers();
         void set_destination();
         int get_distance(int x1, int y1);
+
         void make_move();
+
         int get_x1();
         int get_y1();
         int get_x2();
         int get_y2();
-        
 };
 
 #endif // Bot_hpp
