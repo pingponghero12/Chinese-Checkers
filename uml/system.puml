@@ -67,20 +67,28 @@ package "Server System" {
     }
 
     class Game {
-        + Game()
-        + ~Game()
+        + Game(int number_of_players, int db_id, int board, int client_id, ServerController* controller_ptr, int with_bot)
         + int get_id()
         + int get_game_type()
         + int get_players()
-        + void add_player(int client_number)
-        + void remove_player(int client_number)
-        + void move(int client_id)
+        + int get_board()
+        + void add_player(int client_id)
+        + void remove_player(int client_id)
         + void end()
+        + void move(int x1, int y1, int x2, int y2)
+        + void move_bot()
         --
-        - std::vector<int> players;
-        - int id;
-        - int game_type;
-        - Board board;
+        - int id
+        - int db_id
+        - int game_type
+        - int board_type
+        - int with_bot
+        - int number_of_bots
+        - int move_id
+        - std::vector<int> players
+        - std::shared_ptr<Board> board_obj
+        - std::vector<Bot> bots
+        - ServerController* controller
     }
 
     abstract class Board {
@@ -126,9 +134,48 @@ package "Server System" {
         + std::vector<std::pair<int, int>> possible_moves(int x, int y)
     }
 
+    class Bot {
+        + Bot(std::shared_ptr<Board> board)
+        + void set_color(int color_int)
+        + void get_checkers()
+        + void set_destination()
+        + int get_distance(int x1, int y1)
+        + void make_move()
+        + int get_x1()
+        + int get_y1()
+        + int get_x2()
+        + int get_y2()
+        --
+        - std::shared_ptr<Board> board
+        - char color
+        - std::vector<std::vector<int>> checkers
+        - std::vector<std::pair<int, int>> destination
+        - int x1, y1, x2, y2
+    }
+
+    class DbConnector {
+        + DbConnector(std::string ip, std::string username, std::string password)
+        + int insert_game(int players, int game_type)
+        + void insert_move(int game, int move_id, int x1, int y1, int x2, int y2)
+        + std::vector<int> get_game(const int& db_game_id)
+        + std::vector<std::string> get_games()
+        + std::vector<int> get_move(int game, int move_id)
+        + std::unique_ptr<sql::ResultSet> request(const std::string& query, const std::vector<std::string>& params)
+        + void execute(const std::string& query, const std::vector<std::string>& params)
+        + int execute_insert(const std::string& query, const std::vector<std::string>& params)
+        --
+        - std::unique_ptr<sql::Connection> conn
+        - std::string username
+    }
+
     Board <|-down- Standard_Board
     Board <|-down- Fast_Board
     Game --> Board : contains
+    Game --> Bot : manages
+    Game --> ServerController : uses
+    Game --> DbConnector : uses
+    Bot --> Board : uses
+    ServerController --> DbConnector : uses
 }
 
 main --> Server : creates and uses
