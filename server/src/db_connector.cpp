@@ -129,7 +129,7 @@ std::unique_ptr<sql::ResultSet> DbConnector::request(const std::string& query, c
 
 void DbConnector::execute(const std::string& query, const std::vector<std::string>& params) {
     try {
-        std::unique_ptr<sql::PreparedStatement> stmt(conn->prepareStatement(query));
+        auto stmt(conn->prepareStatement(query));
 
         for(size_t i = 0; i < params.size(); ++i) {
             stmt->setString(i + 1, params[i]);
