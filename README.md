@@ -18,8 +18,15 @@ This project implements a scalable and modular client-server architecture for Ch
 - 📜 Move history and game state tracking
 
 ## Design Patterns
+Following design patterns were utilized:
+1. Server as Facade
+2. BoardFactory as Factory method
+3. Commands
+4. Dependency Injection of ServerController
+5. Db_Connector as Facade
+6. Boards as strategy
 
-This project follows several design patterns to ensure modularity, maintainability, and scalability. The Command Pattern is used for handling game commands (AbstractCommand), where concrete commands like CmdAddGame and CmdExitGame encapsulate specific actions, making the system extensible. The Factory Method Pattern allows ServerController to dynamically create and register game instances, providing flexible game management. The Strategy Pattern is evident in the Board class, which supports multiple board-filling strategies such as fill_top_triangle and fill_bottom_triangle, enabling different game configurations without modifying core logic. The Proxy Pattern is implemented in ServerController, which acts as an intermediary between the Server and game logic, abstracting direct access and handling network communication. Dependency Injection is utilized in ServerController, which receives dependencies like DbConnector through its constructor, promoting loose coupling and testability. The Observer Pattern is used as ServerController listens for server events and updates player statuses dynamically, ensuring efficient communication between components. These patterns contribute to a robust and scalable architecture for the Chinese Checkers multiplayer experience.
+Beside that, ServerController could be made to also utilize State, Proxy and Observer, but we choose otherwise.
 
 ## System Architecture
 
@@ -32,7 +39,7 @@ This project follows several design patterns to ensure modularity, maintainabili
 ### Prerequisites
 - **Nix Package Manager** (for dependency management)
 - CMake (≥3.15)
-- C++17 compiler
+- C++11 compiler
 - Python 3.10+
 - Docker and docker-compose
 - Qt5 development libraries
@@ -45,27 +52,46 @@ This project uses Nix shells for dependency management:
 
 Enter the development environments with:
 ```bash
-# For general development
-nix-shell shell.nix
+# For client development
+nix-shell --run bash
 
 # For server development
 cd server
-nix-shell shell.nix
+nix-shell --run bash
+```
 
-### Building from Source
-
-**Client Application:**
+Build and run client
 ```bash
-cd client/build
-cmake ..
-make
+# Client
+cd client
+bash run.sh
 # Run the client user interface
-python3 ../gui/main.py
+python3 gui/main.py
 
-**Server Application:**
-``bash
+```
+Build and run server
+```bash
 cd server/build
 cmake ..
 make
-# Run the server
-./server
+
+cd ../docker
+
+# Esure running docker daemon
+sudo dockerd &
+
+# Reset and compose server
+sudo docker-compose down -v
+sudo docker-compose build --no-cache
+sudo docker-compose up -d
+
+# Test server 
+sudo docker-compose exec db mariadb -u admin -p papers_db
+
+# In case of error
+sudo docker-compose logs --tail=50 -f db
+
+# Run server(DB needs to be up)
+./build/server
+
+```
